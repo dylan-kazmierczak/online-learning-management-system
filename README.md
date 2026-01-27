@@ -510,8 +510,8 @@ This project is licensed under the ISC License - see the LICENSE file for detail
 ## Contact
 
 **Author:** Dylan Kazmierczak  
-**Email:** dylan.kazmierczak@[institution].edu  
-**GitHub:** [Your GitHub Profile]
+**Email:** dylan.kazmierczak@yahoo.com  
+**GitHub:** https://github.com/dylan-kazmierczak
 
 ---
 
