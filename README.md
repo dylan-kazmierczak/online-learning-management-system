@@ -117,7 +117,7 @@ For implementation setup, see the [Installation](#installation) section.
 
 ## Wireframes
 
-### Wireframe Sketches
+### Wireframe Sketches (DRAFT)
 
 Below is the wireframe sketch showing the key user workflows and interface layouts for student and instructor experiences.
 
