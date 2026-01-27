@@ -362,51 +362,108 @@ Submit Assignments → View Grades → Track Progress
 
 ## Use Case Diagram
 
-```
-                        ┌─────────────────────────────────┐
-                        │   ONLINE LEARNING MANAGEMENT    │
-                        │         SYSTEM (LMS)            │
-                        └─────────────────────────────────┘
-                                      │
-                    ┌─────────────────┼─────────────────┐
-                    │                 │                 │
-              ●─────┴─────●     ●─────┴─────●     ●─────┴─────●
-           STUDENT       │   INSTRUCTOR     │   ADMINISTRATOR  │
-              │          │       │          │        │         │
-              │          │       │          │        │         │
-              ├──────────┤       ├──────────┤        ├─────────┤
-              │          │       │          │        │         │
-      ◇─────────────────────────────────────────────────────┐  │
-      │  Enroll in Course       │     │                      │  │
-      ◇  (includes)            │     │     Create Course     │  │
-      │                         │     ├────────────────────┐ │  │
-      │  Access Course Content  │     │                    │ │  │
-      ◇  (includes)            │     │     Manage Content  │ │  │
-      │                         │     ├────────────────────┐ │  │
-      │  Submit Assignment      │     │                    │ │  │
-      ◇  (includes)            │     │     Grade Student   │ │  │
-      │                         │     ├────────────────────┐ │  │
-      │  Take Quiz              │     │                    │ │  │
-      ◇  (includes)            │     │  Track Progress    │ │  │
-      │                         │     └────────────────────┘ │  │
-      │  View Grades            │                            │  │
-      ◇  (includes)            │                            │  │
-      │                         │                            │  │
-      └─────────────────────────────────────────────────────┘  │
-              │          │       │          │        │         │
-              │          │       │          │        │         │
-              └──────────┤       └──────────┤        └─────────┘
-                         │                  │
-                    ●────┴────●        ●────┴────●
-                 DATABASE          AUTHENTICATION
-                  SYSTEM              SYSTEM
+### Primary Actors & Use Cases
 
-Legend:
-  ◇ = Use Case
-  ● = Actor
-  ─ = Association
-  ├ = Includes/Extends
 ```
+                    STUDENT ACTOR
+                        │
+        ┌───────────────┼───────────────┐
+        │               │               │
+   ┌─────────────┐ ┌──────────────┐ ┌─────────────┐
+   │   Enroll    │ │    Access    │ │   Submit    │
+   │  in Course  │ │    Course    │ │ Assignment  │
+   │             │ │   Content    │ │             │
+   └─────────────┘ └──────────────┘ └─────────────┘
+        │               │               │
+        └───────────────┼───────────────┘
+                        │
+                ╔═══════════════════╗
+                ║  LMS SYSTEM       ║
+                ║                   ║
+                ╚═══════════════════╝
+                        │
+        ┌───────────────┼───────────────┐
+        │               │               │
+   ┌──────────────┐ ┌───────────┐ ┌──────────────┐
+   │    Take      │ │   View    │ │   Track      │
+   │    Quiz      │ │   Grades  │ │  Progress    │
+   │              │ │           │ │              │
+   └──────────────┘ └───────────┘ └──────────────┘
+        │               │               │
+        └───────────────┼───────────────┘
+                        │
+                    STUDENT ACTOR
+
+─────────────────────────────────────────────────────────
+
+                 INSTRUCTOR ACTOR
+                        │
+        ┌───────────────┼───────────────┐
+        │               │               │
+   ┌─────────────┐ ┌──────────────┐ ┌──────────────┐
+   │   Create    │ │   Manage     │ │    Grade     │
+   │   Course    │ │   Content    │ │   Student    │
+   │             │ │              │ │              │
+   └─────────────┘ └──────────────┘ └──────────────┘
+        │               │               │
+        └───────────────┼───────────────┘
+                        │
+                ╔═══════════════════╗
+                ║  LMS SYSTEM       ║
+                ║                   ║
+                ╚═══════════════════╝
+                        │
+        ┌───────────────┘
+        │
+   ┌────────────────────┐
+   │  Track Progress    │
+   │  (Analytics View)  │
+   │                    │
+   └────────────────────┘
+        │
+    INSTRUCTOR ACTOR
+
+─────────────────────────────────────────────────────────
+
+              SYSTEM INTERACTIONS
+
+┌─────────────────────────────────────────┐
+│         Authentication System           │
+│  (Manages login/registration for all)   │
+└─────────────────────────────────────────┘
+               │              │
+            Student      Instructor
+               │              │
+               └──────┬───────┘
+                      │
+        ╔═══════════════════════╗
+        ║     LMS SYSTEM        ║
+        ║   (All Use Cases)     ║
+        ╚═══════════════════════╝
+                      │
+      ┌───────────────┴───────────────┐
+      │                               │
+  ┌─────────────┐             ┌──────────────┐
+  │  Database   │             │  External    │
+  │  (Data      │             │  Services    │
+  │  Storage)   │             │  (Email, etc)│
+  └─────────────┘             └──────────────┘
+```
+
+### Use Case Summary
+
+| Use Case | Actor | Primary Goal |
+|----------|-------|--------------|
+| Enroll in Course | Student | Register for available courses |
+| Access Course Content | Student | View course materials and lessons |
+| Submit Assignment | Student | Upload and submit work for grading |
+| Take Quiz | Student | Complete assessments and receive feedback |
+| View Grades | Student | Monitor academic performance |
+| Track Progress | Student | View course completion status |
+| Create Course | Instructor | Set up new courses with structure |
+| Manage Content | Instructor | Upload and organize learning materials |
+| Grade Student | Instructor | Review submissions and assign grades |
+| Track Progress | Instructor | View student analytics and performance |
 
 ---
 
