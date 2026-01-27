@@ -121,7 +121,7 @@ For implementation setup, see the [Installation](#installation) section.
 
 Below is the wireframe sketch showing the key user workflows and interface layouts for student and instructor experiences.
 
-![LMS Wireframes](public/assets/lms_wireframes.jpg)
+![LMS Wireframes](images/lms_wireframes.jpg)
 
 The wireframes include:
 - **Student Dashboard** - Overview of enrolled courses, upcoming assignments, and grade summary
