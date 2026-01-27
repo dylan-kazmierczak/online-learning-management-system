@@ -69,17 +69,17 @@ For implementation setup, see the [Installation](#installation) section.
 
 ## System Architecture
 
-### Architecture Diagram (DRAFT)
+### Architecture Diagram
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                     USER INTERFACE LAYER                     │
+│                     USER INTERFACE LAYER                    │
 │  (HTML/Handlebars Templates, CSS, JavaScript)               │
 └────────────────────────────┬────────────────────────────────┘
                              │
                              ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                    APPLICATION LAYER                         │
+│                    APPLICATION LAYER                        │
 │  (Express.js Routes, Controllers, Business Logic)           │
 ├─────────────────────────────────────────────────────────────┤
 │  ├─ Authentication Module                                   │
@@ -92,13 +92,13 @@ For implementation setup, see the [Installation](#installation) section.
                              │
                              ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                    DATA ACCESS LAYER                         │
+│                    DATA ACCESS LAYER                        │
 │  (API Routes, Data Validation, RESTful Endpoints)           │
 └────────────────────────────┬────────────────────────────────┘
                              │
                              ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                    DATABASE LAYER                            │
+│                    DATABASE LAYER                           │
 │  (PostgreSQL/MySQL - Users, Courses, Enrollments,           │
 │   Assignments, Submissions, Grades)                         │
 └─────────────────────────────────────────────────────────────┘
