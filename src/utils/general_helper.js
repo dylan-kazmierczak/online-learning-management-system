@@ -16,19 +16,5 @@ const requester = require("./axios_helper");
  * 								 If the request is successful, it returns the response from the Webex API.
  */
 
-async function send_webex(message) {
-	var response = await requester.post_request(
-		"https://webexapis.com/v1/messages",
-		{ roomId: `${process.env.WEBEX_ROOM}`, markdown: message },
-		{
-			Authorization: `Bearer ${process.env.WEBEX_BOT}`,
-			"Content-Type": "application/json",
-		}
-	);
-
-	return response.data;
-}
-
 module.exports = {
-	send_webex,
 };

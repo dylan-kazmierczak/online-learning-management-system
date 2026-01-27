@@ -25,28 +25,6 @@ const important_transport = new winston.transports.DailyRotateFile({
 	level: "error",
 });
 
-// runs when an error is logged successfully
-important_transport.on("logged", async (info) => {
-  try {
-    const { send_webex } = require("./general_helper");
-
-    const stripAnsi = (str) => str.replace(/\x1B\[[0-9;]*m/g, '');
-    const cleanLevel = stripAnsi(info.level).toUpperCase().trim();
-    const cleanMessage = stripAnsi(info.message).trim();
-    const timestamp = info.timestamp || new Date().toISOString();
-
-    // Extract file:line from stack trace
-    const stack = info.stack || (info[Symbol.for("splat")]?.[0]?.stack ?? "");
-    const stackMatch = stack.match(/at\s(.+?\\[^\\\/]+:\d+:\d+)/);
-    const location = stackMatch ? stackMatch[1] : stack;
-
-    const msg = `[${cleanLevel}] ${timestamp} | ${location} | ${cleanMessage}`;
-    await send_webex(`${msg} | ${process.env.APP_NAME}`);
-  } catch (err) {
-    console.error("Failed to send Webex alert:", err);
-  }
-});
-
 // transport for logs with the maximum level of "info" or 6
 // the logs are saved to a file named "garbage.log" and are kept for 3 days before deleting
 const garbage_transport = new winston.transports.DailyRotateFile({
