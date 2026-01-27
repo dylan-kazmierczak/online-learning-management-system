@@ -53,6 +53,20 @@ The Online Learning Management System (LMS) is designed to provide a centralized
 
 ---
 
+## Quick Start
+
+To get started with the LMS design documentation:
+
+1. **View the Design:** Review the [Wireframes](#wireframes) section to see the user interface mockups
+2. **Understand Requirements:** Check [User Stories](#user-stories) for feature descriptions and acceptance criteria
+3. **Learn the Workflows:** See [Use Cases](#use-cases) for detailed interaction flows
+4. **Review Architecture:** Explore [System Architecture](#system-architecture) for the technical design
+5. **Dive Deeper:** Read the [Complete Design Document](documents/DESIGN_DOCUMENT.md) for specifications and technical details
+
+For implementation setup, see the [Installation](#installation) section.
+
+---
+
 ## System Architecture
 
 ### Architecture Diagram (DRAFT)
@@ -101,9 +115,9 @@ The Online Learning Management System (LMS) is designed to provide a centralized
 
 ---
 
-## Wireframes (DRAFT)
+## Wireframes
 
-### Interactive Wireframe Prototypes
+### Wireframe Sketches (DRAFT)
 
 Below is the wireframe sketch showing the key user workflows and interface layouts for student and instructor experiences.
 
@@ -487,6 +501,14 @@ online-learning-management-system/
 │   └── partials/
 └── README.md                       # This file
 ```
+
+---
+
+## Design Documentation
+
+For comprehensive technical specifications and detailed documentation, see:
+
+- **[Complete Design Document](documents/DESIGN_DOCUMENT.md)** - Full technical specification including data model, API endpoints, security requirements, and implementation phases
 
 ---
 
