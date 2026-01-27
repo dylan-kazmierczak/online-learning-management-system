@@ -1,0 +1,33 @@
+{
+	"name": "nodejs_template_repository",
+	"version": "1.0.0",
+	"description": "This is a template for a NodeJS project that can be copied to make set up faster.",
+	"main": "app.js",
+	"scripts": {
+		"start": "node app.js prod",
+		"test": "node app.js dev",
+		"dev": "nodemon app.js dev",
+		"example": "node app.js dev.example"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/RLG-Development/NodeJS_Template_Repository.git"
+	},
+	"author": "Elijah Sprung",
+	"license": "ISC",
+	"dependencies": {
+		"-": "^0.0.1",
+		"@pipedrive/app-extensions-sdk": "^0.11.1",
+		"axios": "^1.7.9",
+		"body-parser": "^1.20.3",
+		"dotenv": "^16.4.7",
+		"express": "^4.21.2",
+		"express-handlebars": "^8.0.1",
+		"nodemon": "^3.1.9",
+		"path": "^0.12.7",
+		"save": "^2.9.0",
+		"url": "^0.11.4",
+		"winston": "^3.17.0",
+		"winston-daily-rotate-file": "^5.0.0"
+	}
+}

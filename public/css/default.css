@@ -1,0 +1,92 @@
+.container {
+	height: 100vh;
+	width: auto;
+	max-width: 100%;
+	margin-left: 10%;
+	margin-right: 10%;
+	align-content: center;
+	position: relative;
+}
+
+.flex-row {
+	max-height: 100%;
+}
+
+.form-control,
+.form-select {
+	border-radius: 8px;
+	border: 1px solid #343a40;
+	margin-right: 2.5px;
+	margin-left: 2.5px;
+}
+
+.btn {
+	font-weight: 500;
+	letter-spacing: 1;
+	background-color: white;
+	border: 1px solid #198754;
+}
+
+.btn:hover,
+.btn:focus,
+.btn:active,
+.btn:disabled {
+	background-color: #198754;
+	border: 1px solid black;
+}
+
+.ui-autocomplete {
+	max-height: 300px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	box-sizing: border-box;
+	position: absolute;
+	z-index: 1000;
+}
+
+.ui-autocomplete-loading {
+	background-image: url(https://cdn.glitch.global/fb308e62-ad72-4e5f-a68c-18c3d2da3d07/Rolling-1s-200px%20transparent.gif?v=1705090116385) !important;
+	background-repeat: no-repeat;
+	background-position: right calc(0.375em + 0.1875rem) center;
+	background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+	padding-right: calc(1.5em + 0.75rem);
+}
+
+.ui-menu-item-wrapper {
+	border-bottom: 0.25px solid lightgray;
+	overflow-x: hidden;
+}
+
+.ui-menu-item-wrapper:hover {
+	background-color: #4fb949;
+	color: #ffffff;
+	border-color: #4fb949;
+}
+
+.ui-menu-item-wrapper:focus {
+	background-color: #4fb949;
+	color: #ffffff;
+	border-color: #4fb949;
+}
+
+.ui-state-hover {
+	background-color: #4fb949;
+	color: #ffffff;
+	border-color: #4fb949;
+}
+
+.ui-widget-content .ui-state-active {
+	background-color: #4fb949;
+	color: #ffffff;
+	border-color: #4fb949;
+}
+
+.btn-nav {
+	min-width: 200px;
+}
+
+.carrier-title {
+	font-size: 4vw; /* Adjusts the font size proportionally to the viewport width */
+	color: #198754; /* Sets the text color to the specified hex value */
+	padding-bottom: 50px; /* Adds bottom padding of 100 pixels */
+}
