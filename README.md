@@ -11,6 +11,7 @@ An integrated digital platform designed to support course delivery, student enga
 ## Table of Contents
 
 - [Overview](#overview)
+- [Software Requirements](#software-requirements)
 - [System Architecture](#system-architecture)
 - [Wireframes](#wireframes)
 - [User Stories](#user-stories)
@@ -64,6 +65,25 @@ To get started with the LMS design documentation:
 5. **Dive Deeper:** Read the [Complete Design Document](documents/DESIGN_DOCUMENT.md) for specifications and technical details
 
 For implementation setup, see the [Installation](#installation) section.
+
+---
+
+## Software Requirements
+
+The following table defines the key software requirements extracted from user stories and use cases. Each requirement describes what the system shall do and is objectively testable.
+
+| ID | Requirement |
+|----|-------------|
+| REQ-1 | The system shall provide a course catalog that displays all available courses with title, description, instructor name, and enrollment status. |
+| REQ-2 | The system shall authenticate users with email and password credentials and enforce password strength requirements (minimum 8 characters, mixed case, numbers). |
+| REQ-3 | The system shall allow students to submit assignments with file uploads or text-based responses, include timestamps, and notify students when grades are posted. |
+| REQ-4 | The system shall allow instructors to upload course content in multiple file formats (PDF, MP4, PPT, DOCX) and organize content hierarchically by Course → Module → Lesson. |
+| REQ-5 | The system shall maintain and display a gradebook that records assignment grades, calculates course grade totals, and provides grade distribution statistics. |
+| REQ-6 | The system shall display student progress tracking indicators showing course completion percentage, module status, and assignment submission status. |
+| REQ-7 | The system shall allow instructors to create quizzes with multiple question types (multiple choice, short answer, essay) and configure time limits, passing scores, and retake policies. |
+| REQ-8 | The system shall automatically grade applicable quiz questions and provide instant feedback to students upon quiz submission. |
+| REQ-9 | The system shall send email notifications to students when new course content is published, when grades are posted, and for assignment submission confirmations. |
+| REQ-10 | The system shall implement role-based access control to differentiate between Student, Instructor, and Administrator roles with appropriate permissions and access levels. |
 
 ---
 
