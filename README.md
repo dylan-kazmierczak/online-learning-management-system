@@ -15,6 +15,8 @@ An integrated digital platform designed to support course delivery, student enga
 - [Implementation Phases](#implementation-phases)
 - [Software Requirements](#software-requirements)
 - [System Architecture](#system-architecture)
+- [Entity Relationship Diagram](#entity-relationship-diagram)
+- [UML Class Diagram](#uml-class-diagram)
 - [Wireframes](#wireframes)
 - [User Stories](#user-stories)
 - [Use Cases](#use-cases)
@@ -192,6 +194,65 @@ The following table defines the key software requirements for Phase 1 MVP. Each 
 | **Application Layer** | Business logic, route handlers, authentication | Express.js, Node.js |
 | **API Layer** | RESTful API endpoints for CRUD operations | Express.js, JSON |
 | **Database Layer** | Persistent data storage | PostgreSQL/MySQL |
+
+---
+
+## Entity Relationship Diagram
+
+### Chen Notation ERD
+
+The following diagram shows the entities, attributes, and relationships for the LMS database design in Chen notation.
+
+![LMS Entity Relationship Diagram](images/lms_erd_diagram.jpg)
+
+**Key Relationships:**
+- User enrolls in Course (Many-to-Many via Enrollment table)
+- Instructor teaches Course (One-to-Many)
+- Course contains CourseContent (One-to-Many)
+- Course contains Assignment (One-to-Many)
+- Assignment has Submission (One-to-Many)
+- Submission receives Grade (One-to-One)
+
+**Core Entities:**
+- **User:** Students and Instructors with authentication credentials
+- **Enrollment:** Junction table linking Users to Courses
+- **Course:** Course information created by Instructors
+- **CourseContent:** PDF files and materials uploaded for courses
+- **Assignment:** Assignments within courses with due dates
+- **Submission:** Student file submissions with timestamps
+- **Grade:** Grading and instructor feedback on submissions
+
+---
+
+## UML Class Diagram
+
+### Software Implementation Classes
+
+The following diagram shows the class structure for implementing the entity relationships as software objects.
+
+![LMS UML Class Diagram](images/lms_uml_class_diagram.jpg)
+
+**Key Classes:**
+- **User:** Base class for Students and Instructors with authentication methods
+- **Course:** Course management with methods for content and assignment creation
+- **Enrollment:** Junction class managing the Many-to-Many relationship between User and Course
+- **CourseContent:** Manages PDF files and course material uploads
+- **Assignment:** Creates and manages assignments within courses
+- **Submission:** Handles student assignment submissions with timestamps
+- **Grade:** Manages grading and instructor feedback
+
+**Class Relationships:**
+- User has Many-to-Many relationship with Course through Enrollment
+- Course has One-to-Many relationship with CourseContent
+- Course has One-to-Many relationship with Assignment
+- Assignment has One-to-Many relationship with Submission
+- Submission has One-to-One relationship with Grade
+- User has Many-to-Many relationship with Submission
+
+**Visibility Notation:**
+- `-` denotes private attributes (internal only)
+- `+` denotes public methods (accessible from outside)
+- Return types are specified after method signatures
 
 ---
 

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LMS UML Class Diagram</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 1400px;
+            width: 100%;
+            overflow-x: auto;
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        
+        .button-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 0 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .legend {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 6px;
+        }
+        
+        .legend h3 {
+            margin-top: 0;
+            color: #667eea;
+        }
+        
+        .legend ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .legend li {
+            margin: 8px 0;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>LMS UML Class Diagram</h1>
+        <p class="subtitle">Software Implementation Classes - Online Learning Management System</p>
+        
+        <div class="mermaid">
+classDiagram
+    class User {
+        -int user_id
+        -string email
+        -string password_hash
+        -string full_name
+        -enum role
+        -datetime created_at
+        +register(email, password) bool
+        +login(email, password) bool
+        +getProfile() UserProfile
+        +enrollCourse(courseId) bool
+        +getEnrolledCourses() Course[]
+    }
+    
+    class Course {
+        -int course_id
+        -string course_code
+        -string course_name
+        -string description
+        -int instructor_id
+        -datetime created_at
+        -CourseContent[] contents
+        -Assignment[] assignments
+        +create(data) Course
+        +update(data) bool
+        +delete() bool
+        +addContent(file) CourseContent
+        +createAssignment(data) Assignment
+        +getEnrolledStudents() User[]
+        +getStudentGrade(userId) float
+    }
+    
+    class Enrollment {
+        -int enrollment_id
+        -int user_id
+        -int course_id
+        -datetime enrolled_at
+        +create(userId, courseId) Enrollment
+        +remove() bool
+    }
+    
+    class CourseContent {
+        -int content_id
+        -int course_id
+        -string title
+        -string file_path
+        -enum file_type
+        -datetime uploaded_at
+        +upload(file) bool
+        +download() File
+        +delete() bool
+        +getFileSize() int
+    }
+    
+    class Assignment {
+        -int assignment_id
+        -int course_id
+        -string title
+        -string description
+        -datetime due_date
+        -datetime created_at
+        -Submission[] submissions
+        +create(data) Assignment
+        +update(data) bool
+        +delete() bool
+        +addSubmission(subsData) Submission
+        +getSubmissions() Submission[]
+        +isOverdue() bool
+    }
+    
+    class Submission {
+        -int submission_id
+        -int assignment_id
+        -int user_id
+        -string file_path
+        -datetime submitted_at
+        -Grade grade
+        +submit(file) bool
+        +getFile() File
+        +getGrade() Grade
+        +isLate() bool
+    }
+    
+    class Grade {
+        -int grade_id
+        -int submission_id
+        -int score
+        -string feedback
+        -datetime graded_at
+        +assignGrade(score, feedback) bool
+        +updateFeedback(feedback) bool
+        +getLetterGrade() string
+    }
+    
+    User "1" -- "M" Enrollment
+    Course "1" -- "M" Enrollment
+    Course "1" -- "M" CourseContent
+    Course "1" -- "M" Assignment
+    User "1" -- "M" Assignment
+    Assignment "1" -- "M" Submission
+    User "M" -- "M" Submission
+    Submission "1" -- "1" Grade
+        </div>
+        
+        <div class="legend">
+            <h3>Class Relationships</h3>
+            <ul>
+                <li><strong>User:</strong> Base class for Students and Instructors with authentication methods</li>
+                <li><strong>Course:</strong> Course management with content and assignments</li>
+                <li><strong>Enrollment:</strong> Junction class for Many-to-Many relationship between User and Course</li>
+                <li><strong>CourseContent:</strong> Manages PDF files and course materials</li>
+                <li><strong>Assignment:</strong> Creates assignments within courses</li>
+                <li><strong>Submission:</strong> Student submissions with timestamps</li>
+                <li><strong>Grade:</strong> Grading and feedback on submissions</li>
+            </ul>
+            
+            <h3>Visibility Notation</h3>
+            <ul>
+                <li><strong>+</strong> Public methods (accessible from outside)</li>
+                <li><strong>-</strong> Private attributes (internal only)</li>
+                <li><strong>Return types:</strong> Specified after method name (e.g., <code>+login(): bool</code>)</li>
+            </ul>
+        </div>
+        
+        <div class="button-container">
+            <button onclick="downloadDiagram()">Download as PNG</button>
+            <button onclick="downloadSVG()">Download as SVG</button>
+        </div>
+    </div>
+    
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+        
+        function downloadDiagram() {
+            const svgElement = document.querySelector('.mermaid svg');
+            if (!svgElement) {
+                alert('Diagram not rendered yet. Please wait a moment and try again.');
+                return;
+            }
+            
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const svgData = new XMLSerializer().serializeToString(svgElement);
+            const img = new Image();
+            
+            canvas.width = svgElement.getBBox().width;
+            canvas.height = svgElement.getBBox().height;
+            
+            img.onload = function() {
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0);
+                canvas.toBlob(function(blob) {
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = 'lms_uml_class_diagram.png';
+                    link.click();
+                });
+            };
+            
+            img.src = 'data:image/svg+xml;base64,' + btoa(svgData);
+        }
+        
+        function downloadSVG() {
+            const svgElement = document.querySelector('.mermaid svg');
+            if (!svgElement) {
+                alert('Diagram not rendered yet. Please wait a moment and try again.');
+                return;
+            }
+            
+            const svgData = new XMLSerializer().serializeToString(svgElement);
+            const blob = new Blob([svgData], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'lms_uml_class_diagram.svg';
+            link.click();
+        }
+    </script>
+</body>
+</html>
