@@ -3,14 +3,16 @@
 An integrated digital platform designed to support course delivery, student engagement, and academic progress tracking. This system enables instructors to create and manage courses while providing students with a centralized hub to enroll, access content, submit assignments, and monitor their academic progress.
 
 **Author:** Dylan Kazmierczak  
-**Date:** January 27, 2026  
-**Technology Stack:** Node.js, Express.js, Handlebars, PostgreSQL/MySQL, RESTful API
+**Date:** February 24, 2026  
+**Technology Stack:** Node.js, Express.js, Handlebars, PostgreSQL/MySQL, RESTful API  
+**Repository:** [github.com/dylan-kazmierczak/online-learning-management-system](https://github.com/dylan-kazmierczak/online-learning-management-system)
 
 ---
 
 ## Table of Contents
 
 - [Overview](#overview)
+- [Implementation Phases](#implementation-phases)
 - [Software Requirements](#software-requirements)
 - [System Architecture](#system-architecture)
 - [Wireframes](#wireframes)
@@ -31,25 +33,34 @@ The Online Learning Management System (LMS) is designed to provide a centralized
 
 ### Key Benefits
 
-- **For Instructors:** Create and manage courses, upload learning materials, design quizzes/assignments, and review student performance
+- **For Instructors:** Create courses, upload materials, manage assignments, and grade student work
 - **For Students:** Enroll in courses, access content, submit assignments, and view grades
-- **For Institution:** Centralized data management, progress analytics, and scalable infrastructure
+- **For Institution:** Centralized course and grade management with clean, simple interface
 
 ### Scope
 
-**In Scope:**
-- User authentication and role-based access
-- Course creation and management
-- Content delivery (documents, videos, links)
-- Assignment and quiz management
-- Submission tracking and grading
-- Progress reporting
+**Phase 1 (MVP - Essential Features Only):**
+- Student and Instructor account registration and login
+- Instructors can create courses and view enrolled students
+- Students can enroll in courses
+- Instructors can upload course content (text descriptions, PDF files)
+- Instructors can create assignments with due dates
+- Students can submit assignment files
+- Instructors can grade submissions with simple numeric scores
+- Students can view their grades
 
-**Out of Scope (Future Enhancements):**
-- Advanced learning analytics
-- Third-party integrations
+**Phase 2 (Enhanced Features):**
+- Assignment submission comments and instructor feedback
+- Email notifications for new assignments and grade postings
+- Student dashboard showing enrolled courses and grades
+- Course syllabus and announcements
+
+**Phase 3 (Future Enhancements):**
+- Advanced content organization (modules and lessons)
+- Quiz creation and assessment tools
+- Detailed analytics and reporting
+- Video content support
 - Mobile application
-- Video streaming infrastructure
 - Virtual classroom features
 
 ---
@@ -68,22 +79,71 @@ For implementation setup, see the [Installation](#installation) section.
 
 ---
 
+## Implementation Phases
+
+Based on feedback from the preliminary design review, this project uses a simplified approach focusing on essential LMS functionality. The MVP is intentionally minimal to ensure a working, stable system that can be expanded iteratively.
+
+### Phase 1: Minimum Viable Product (MVP)
+
+**Core Functionality:**
+- Account registration and login for Students and Instructors
+- Instructors create courses and view enrolled students
+- Students enroll in available courses
+- Instructors upload course content (text and PDF files)
+- Instructors create assignments with titles, descriptions, and due dates
+- Students submit assignment files with timestamps
+- Instructors assign numeric grades to submissions
+- Students view their grades for each assignment
+
+**Technical Focus:** Basic database schema, simple RESTful API, clean UI for essential workflows
+
+**Estimated Timeline:** Weeks 1-6
+
+### Phase 2: Enhanced Features
+
+**Added Functionality:**
+- Instructor feedback and comments on submitted assignments
+- Email notifications for assignment reminders
+- Student dashboard showing courses and current grades
+- Course announcements and syllabus pages
+
+**Technical Focus:** Notification system, email integration, dashboard queries
+
+**Estimated Timeline:** Weeks 7-10
+
+### Phase 3: Future Expansion
+
+**Advanced Features:**
+- Hierarchical content organization (modules/lessons)
+- Quiz and assessment tools
+- Advanced analytics and grade reporting
+- Video content support
+- Mobile-responsive design
+
+This streamlined approach prioritizes getting a working system into production quickly, reducing complexity, and allowing for test-driven enhancements.
+
+---
+
 ## Software Requirements
 
-The following table defines the key software requirements extracted from user stories and use cases. Each requirement describes what the system shall do and is objectively testable.
+The following table defines the key software requirements for Phase 1 MVP. Each requirement describes what the system shall do and is objectively testable.
 
-| ID | Requirement |
-|----|-------------|
-| REQ-1 | The system shall provide a course catalog that displays all available courses with title, description, instructor name, and enrollment status. |
-| REQ-2 | The system shall authenticate users with email and password credentials and enforce password strength requirements (minimum 8 characters, mixed case, numbers). |
-| REQ-3 | The system shall allow students to submit assignments with file uploads or text-based responses, include timestamps, and notify students when grades are posted. |
-| REQ-4 | The system shall allow instructors to upload course content in multiple file formats (PDF, MP4, PPT, DOCX) and organize content hierarchically by Course → Module → Lesson. |
-| REQ-5 | The system shall maintain and display a gradebook that records assignment grades, calculates course grade totals, and provides grade distribution statistics. |
-| REQ-6 | The system shall display student progress tracking indicators showing course completion percentage, module status, and assignment submission status. |
-| REQ-7 | The system shall allow instructors to create quizzes with multiple question types (multiple choice, short answer, essay) and configure time limits, passing scores, and retake policies. |
-| REQ-8 | The system shall automatically grade applicable quiz questions and provide instant feedback to students upon quiz submission. |
-| REQ-9 | The system shall send email notifications to students when new course content is published, when grades are posted, and for assignment submission confirmations. |
-| REQ-10 | The system shall implement role-based access control to differentiate between Student, Instructor, and Administrator roles with appropriate permissions and access levels. |
+| ID | Requirement | Phase |
+|----|-----------|----|  
+| REQ-1 | The system shall allow users to register with email and password, assigning them as either Student or Instructor. | 1 |
+| REQ-2 | The system shall authenticate users with email and password credentials and maintain secure sessions. | 1 |
+| REQ-3 | The system shall allow instructors to create courses with a course name, code, and description. | 1 |
+| REQ-4 | The system shall allow students to view available courses and enroll in them. | 1 |
+| REQ-5 | The system shall allow instructors to view a list of students enrolled in their courses. | 1 |
+| REQ-6 | The system shall allow instructors to upload PDF files as course materials. | 1 |
+| REQ-7 | The system shall allow students to download and view uploaded course materials. | 1 |
+| REQ-8 | The system shall allow instructors to create assignments with title, description, and due date. | 1 |
+| REQ-9 | The system shall allow students to submit assignment files and automatically record submission timestamp. | 1 |
+| REQ-10 | The system shall allow instructors to view submitted assignments and assign numeric grades (0-100). | 1 |
+| REQ-11 | The system shall allow students to view their assignment grades and submission timestamps. | 1 |
+| REQ-12 | The system shall allow instructors to add written feedback comments to submitted assignments. | 2 |
+| REQ-13 | The system shall send email notifications when assignments are posted and when grades are submitted. | 2 |
+| REQ-14 | The system shall display a student dashboard showing enrolled courses with current grade for each course. | 2 |
 
 ---
 
@@ -614,4 +674,4 @@ This project is licensed under the ISC License - see the LICENSE file for detail
 
 ---
 
-**Last Updated:** January 27, 2026
+**Last Updated:** February 24, 2026
