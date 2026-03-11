@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Assignment - LMS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar h1 {
+            font-size: 20px;
+            margin: 0;
+        }
+        
+        .logout-btn {
+            background: #e74c3c;
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .breadcrumb {
+            background: white;
+            padding: 12px 20px;
+            border-radius: 8px 8px 0 0;
+            font-size: 13px;
+            color: #666;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .breadcrumb a {
+            color: #667eea;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        
+        .assignment-container {
+            background: white;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .assignment-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .assignment-header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .assignment-header p {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        
+        .header-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            font-size: 13px;
+        }
+        
+        .info-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            opacity: 0.8;
+            margin-bottom: 3px;
+        }
+        
+        .info-value {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+        
+        .rubric {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .rubric-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 13px;
+        }
+        
+        .rubric-item:last-child {
+            border-bottom: none;
+            font-weight: 600;
+            background: white;
+            padding: 10px;
+            margin-left: -15px;
+            margin-right: -15px;
+            margin-bottom: -15px;
+            border-radius: 0 0 5px 5px;
+        }
+        
+        .rubric-item .criterion {
+            color: #2c3e50;
+        }
+        
+        .rubric-item .points {
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .total-points {
+            color: #27ae60;
+            font-weight: 600;
+        }
+        
+        .description {
+            color: #666;
+            line-height: 1.6;
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 20px;
+        }
+        
+        .deadline-alert {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #856404;
+            font-size: 13px;
+        }
+        
+        .deadline-alert.good {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+        
+        .upload-area {
+            border: 2px dashed #667eea;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f8f9ff;
+            margin-bottom: 20px;
+        }
+        
+        .upload-area:hover {
+            background: #ecf2ff;
+            border-color: #764ba2;
+            transform: translateY(-2px);
+        }
+        
+        .upload-area.dragover {
+            background: #ecf2ff;
+            border-color: #764ba2;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .upload-text {
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .upload-subtext {
+            color: #999;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+        
+        .browse-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+        
+        .browse-btn:hover {
+            background: #764ba2;
+        }
+        
+        #fileInput {
+            display: none;
+        }
+        
+        .upload-info {
+            background: #ecf0f1;
+            border-radius: 5px;
+            padding: 10px 15px;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .uploaded-file {
+            background: #d4edda;
+            border: 1px solid #28a745;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .file-info {
+            flex: 1;
+        }
+        
+        .file-name {
+            color: #155724;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+        
+        .file-size {
+            color: #666;
+            font-size: 12px;
+        }
+        
+        .remove-file {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.3s;
+        }
+        
+        .remove-file:hover {
+            background: #c0392b;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 13px;
+            resize: vertical;
+            min-height: 100px;
+            transition: border-color 0.3s;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-submit {
+            background: #27ae60;
+            color: white;
+            flex: 1;
+        }
+        
+        .btn-submit:hover {
+            background: #229954;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+        }
+        
+        .btn-cancel {
+            background: #ecf0f1;
+            color: #2c3e50;
+            flex: 1;
+        }
+        
+        .btn-cancel:hover {
+            background: #d5dbdb;
+        }
+        
+        .success-message {
+            display: none;
+            background: #d4edda;
+            border: 1px solid #28a745;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #155724;
+        }
+        
+        .success-message.show {
+            display: block;
+            animation: slideIn 0.3s;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>📚 LMS - Submit Assignment</h1>
+        <a href="course-content.html" style="color: white; text-decoration: none;">
+            <button class="logout-btn">Back to Course</button>
+        </a>
+    </div>
+    
+    <div class="container">
+        <div class="breadcrumb">
+            <a onclick="goToDashboard()">Dashboard</a> / 
+            <a onclick="goToCourse()">CS 101</a> / 
+            <span>Programming Challenge: Calculator App</span>
+        </div>
+        
+        <div class="assignment-container">
+            <div class="assignment-header">
+                <h1>Programming Challenge: Calculator App</h1>
+                <p>Build a functional calculator application using Python</p>
+                
+                <div class="header-info">
+                    <div class="info-item">
+                        <div class="info-label">Course</div>
+                        <div class="info-value">CS 101</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Status</div>
+                        <div class="info-value">Open</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Due Date</div>
+                        <div class="info-value">March 13, 2026</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Time Left</div>
+                        <div class="info-value">2 days, 14 hrs</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content">
+                <div class="success-message" id="successMessage">
+                    ✓ Assignment submitted successfully! Your instructor will grade it soon.
+                </div>
+                
+                <!-- Assignment Instructions -->
+                <div class="section">
+                    <div class="section-title">Assignment Instructions</div>
+                    <div class="description">
+                        <strong>Objective:</strong> Create a simple calculator application in Python that can perform addition, subtraction, multiplication, and division operations. Your program should accept user input and display results with appropriate error handling for division by zero.
+                        <br><br>
+                        <strong>Requirements:</strong>
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>Implement a function for each operation (add, subtract, multiply, divide)</li>
+                            <li>Create a main menu for user selection</li>
+                            <li>Handle edge cases (division by zero, non-numeric input)</li>
+                            <li>Include clear prompts and output messages</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Due Date Alert -->
+                <div class="deadline-alert good">
+                    ✓ You have <strong>2 days</strong> remaining to submit this assignment. Submit early to avoid last-minute issues!
+                </div>
+                
+                <!-- Rubric -->
+                <div class="section">
+                    <div class="section-title">Grading Rubric</div>
+                    <div class="rubric">
+                        <div class="rubric-item">
+                            <span class="criterion">Functionality (operations work correctly)</span>
+                            <span class="points">25 pts</span>
+                        </div>
+                        <div class="rubric-item">
+                            <span class="criterion">Error Handling</span>
+                            <span class="points">25 pts</span>
+                        </div>
+                        <div class="rubric-item">
+                            <span class="criterion">Code Quality & Comments</span>
+                            <span class="points">25 pts</span>
+                        </div>
+                        <div class="rubric-item">
+                            <span class="criterion">User Interface & Prompts</span>
+                            <span class="points">25 pts</span>
+                        </div>
+                        <div class="rubric-item">
+                            <span class="criterion total-points">Total: 100 pts</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- File Upload -->
+                <div class="section">
+                    <div class="section-title">Submit Your Work</div>
+                    
+                    <div class="upload-area" id="uploadArea" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" onclick="document.getElementById('fileInput').click()">
+                        <div class="upload-icon">📤</div>
+                        <div class="upload-text">Drag and drop your file here</div>
+                        <div class="upload-subtext">or click to browse</div>
+                        <button type="button" class="browse-btn">Choose File</button>
+                    </div>
+                    
+                    <input 
+                        type="file" 
+                        id="fileInput" 
+                        accept=".py,.pdf,.docx,.zip"
+                        onchange="handleFileSelect(event)"
+                    >
+                    
+                    <div class="upload-info">
+                        <strong>Accepted file types:</strong> Python (.py), PDF, Word (.docx), ZIP archives
+                        <br><strong>Maximum file size:</strong> 50 MB
+                    </div>
+                    
+                    <div id="uploadedFile" style="display: none;">
+                        <div class="uploaded-file">
+                            <div class="file-info">
+                                <div class="file-name" id="fileName">calculator.py</div>
+                                <div class="file-size" id="fileSize">2.5 KB</div>
+                            </div>
+                            <button type="button" class="remove-file" onclick="removeFile()">Remove</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Comments -->
+                    <div class="form-group" style="margin-top: 20px;">
+                        <label for="comments">Comments (Optional)</label>
+                        <textarea 
+                            id="comments" 
+                            placeholder="Add any comments for your instructor (e.g., 'I spent extra time implementing a GUI version' or 'I had difficulty with error handling')"
+                        ></textarea>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <button class="btn btn-submit" onclick="submitAssignment()">Submit Assignment</button>
+                        <a href="course-content.html" style="text-decoration: none;">
+                            <button class="btn btn-cancel" type="button">Cancel</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let fileSelected = false;
+        let fileName = '';
+        
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('uploadArea').classList.add('dragover');
+        }
+        
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('uploadArea').classList.remove('dragover');
+        }
+        
+        function handleDrop(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('uploadArea').classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFileInput(files[0]);
+            }
+        }
+        
+        function handleFileSelect(e) {
+            const files = e.target.files;
+            if (files.length > 0) {
+                handleFileInput(files[0]);
+            }
+        }
+        
+        function handleFileInput(file) {
+            fileName = file.name;
+            const fileSize = (file.size / 1024).toFixed(2) + ' KB';
+            
+            document.getElementById('fileName').textContent = fileName;
+            document.getElementById('fileSize').textContent = fileSize;
+            document.getElementById('uploadedFile').style.display = 'block';
+            
+            fileSelected = true;
+        }
+        
+        function removeFile() {
+            document.getElementById('fileInput').value = '';
+            document.getElementById('uploadedFile').style.display = 'none';
+            fileSelected = false;
+            fileName = '';
+        }
+        
+        function submitAssignment() {
+            if (!fileSelected) {
+                alert('Please upload a file before submitting.');
+                return;
+            }
+            
+            const comments = document.getElementById('comments').value;
+            
+            // Simulate submission
+            document.getElementById('successMessage').classList.add('show');
+            
+            // Disable form
+            document.querySelector('.upload-area').style.opacity = '0.6';
+            document.querySelector('.upload-area').style.pointerEvents = 'none';
+            document.getElementById('comments').disabled = true;
+            document.querySelector('.btn-submit').disabled = true;
+            
+            // Redirect after delay
+            setTimeout(() => {
+                alert('Assignment submitted successfully!\n\nFile: ' + fileName + '\n\nYour instructor will review and grade your submission.');
+                window.location.href = 'student-dashboard.html';
+            }, 2000);
+        }
+        
+        function goToDashboard() {
+            window.location.href = 'student-dashboard.html';
+        }
+        
+        function goToCourse() {
+            window.location.href = 'course-content.html';
+        }
+    </script>
+</body>
+</html>

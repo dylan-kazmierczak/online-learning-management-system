@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LMS - Login & Registration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .login-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 450px;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #f5f5f5;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            background: white;
+            color: #2c3e50;
+            border-bottom: 3px solid #27ae60;
+        }
+        
+        .tab:hover {
+            color: #2c3e50;
+        }
+        
+        .form-container {
+            padding: 40px 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        input[type="email"],
+        input[type="password"],
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+        
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        input[type="text"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+        }
+        
+        .role-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .role-option {
+            flex: 1;
+        }
+        
+        .role-option input[type="radio"] {
+            display: none;
+        }
+        
+        .role-label {
+            display: block;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            color: #666;
+        }
+        
+        .role-option input[type="radio"]:checked + .role-label {
+            background: #27ae60;
+            color: white;
+            border-color: #27ae60;
+        }
+        
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+        
+        .remember-forgot a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        .remember-forgot a:hover {
+            text-decoration: underline;
+        }
+        
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        
+        input[type="checkbox"] {
+            cursor: pointer;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+        
+        .form-section {
+            display: none;
+        }
+        
+        .form-section.active {
+            display: block;
+        }
+        
+        .divider {
+            text-align: center;
+            margin: 20px 0;
+            color: #999;
+            font-size: 14px;
+        }
+        
+        .demo-note {
+            background: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 12px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #2c3e50;
+            border-radius: 3px;
+        }
+        
+        .demo-note strong {
+            color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="header">
+            <h1>📚 LMS</h1>
+            <p>Online Learning Management System</p>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('login')">Login</button>
+            <button class="tab" onclick="switchTab('register')">Sign Up</button>
+        </div>
+        
+        <div class="form-container">
+            <!-- Login Form -->
+            <div id="login" class="form-section active">
+                <div class="demo-note">
+                    <strong>Demo Credentials:</strong><br>
+                    Student: john.smith@university.edu / password123<br>
+                    Instructor: dr.jones@university.edu / password123
+                </div>
+                
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="login-email">Email Address</label>
+                        <input 
+                            type="email" 
+                            id="login-email" 
+                            name="email" 
+                            placeholder="your.email@university.edu"
+                            value="john.smith@university.edu"
+                            required
+                        >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input 
+                            type="password" 
+                            id="login-password" 
+                            name="password" 
+                            placeholder="Enter your password"
+                            value="password123"
+                            required
+                        >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="login-role">Login As:</label>
+                        <select id="login-role" name="role" required>
+                            <option value="">Select your role...</option>
+                            <option value="student">Student</option>
+                            <option value="instructor">Instructor</option>
+                        </select>
+                    </div>
+                    
+                    <div class="remember-forgot">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="remember">
+                            Remember me
+                        </label>
+                        <a href="#forgot">Forgot password?</a>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Login</button>
+                </form>
+            </div>
+            
+            <!-- Registration Form -->
+            <div id="register" class="form-section">
+                <form onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label for="reg-name">Full Name</label>
+                        <input 
+                            type="text" 
+                            id="reg-name" 
+                            name="name" 
+                            placeholder="John Smith"
+                            required
+                        >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reg-email">Email Address</label>
+                        <input 
+                            type="email" 
+                            id="reg-email" 
+                            name="email" 
+                            placeholder="your.email@university.edu"
+                            required
+                        >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reg-password">Password</label>
+                        <input 
+                            type="password" 
+                            id="reg-password" 
+                            name="password" 
+                            placeholder="At least 8 characters"
+                            required
+                        >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>I am a:</label>
+                        <div class="role-selector">
+                            <div class="role-option">
+                                <input type="radio" id="role-student" name="role" value="student" required>
+                                <label for="role-student" class="role-label">👨‍🎓 Student</label>
+                            </div>
+                            <div class="role-option">
+                                <input type="radio" id="role-instructor" name="role" value="instructor">
+                                <label for="role-instructor" class="role-label">👨‍🏫 Instructor</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <label class="checkbox-label" style="margin-bottom: 20px;">
+                        <input type="checkbox" name="terms" required>
+                        I agree to the Terms of Service
+                    </label>
+                    
+                    <button type="submit" class="submit-btn">Create Account</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function switchTab(tabName) {
+            // Hide all sections
+            document.querySelectorAll('.form-section').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const role = document.getElementById('login-role').value;
+            
+            // Simulate login redirect based on role
+            if (role === 'student') {
+                window.location.href = 'student-dashboard.html';
+            } else if (role === 'instructor') {
+                window.location.href = 'instructor-dashboard.html';
+            }
+        }
+        
+        function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('reg-name').value;
+            const role = document.querySelector('input[name="role"]:checked').value;
+            
+            alert(`Welcome, ${name}! Your account has been created.\n\nYou will be redirected to the dashoard.`);
+            
+            if (role === 'student') {
+                window.location.href = 'student-dashboard.html';
+            } else if (role === 'instructor') {
+                window.location.href = 'instructor-dashboard.html';
+            }
+        }
+    </script>
+</body>
+</html>
