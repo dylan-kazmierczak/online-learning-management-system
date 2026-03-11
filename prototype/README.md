@@ -27,7 +27,7 @@ This prototype demonstrates the following **Phase 1 MVP requirements** and **key
 
 ## Prototype Pages
 
-### 1. Login & Registration
+### Login & Registration
 **File:** [index.html](index.html)
 
 **Demonstrates:**
@@ -51,7 +51,7 @@ Existing User: Login Form → Enter Credentials → Dashboard
 
 ---
 
-### 2. Course Catalog
+### Course Catalog
 **File:** [course-catalog.html](course-catalog.html)
 
 **Demonstrates:**
@@ -80,7 +80,7 @@ Dashboard → Browse Courses → View Course Details → Enroll → Return to Da
 
 ---
 
-### 3. Student Dashboard
+### Student Dashboard
 **File:** [student-dashboard.html](student-dashboard.html)
 
 **Demonstrates:**
@@ -115,7 +115,7 @@ Login → Dashboard → View Enrolled Courses → Track Progress → Access Cour
 
 ---
 
-### 4. Course Content View
+### Course Content View
 **File:** [course-content.html](course-content.html)
 
 **Demonstrates:**
@@ -148,7 +148,7 @@ Dashboard → Select Course → View Content → Download Materials → View Ass
 
 ---
 
-### 5. Assignment Submission
+### Assignment Submission
 **File:** [submit-assignment.html](submit-assignment.html)
 
 **Demonstrates:**
@@ -188,7 +188,7 @@ Dashboard → Course → Assignments → Select Assignment → Upload File → S
 
 ---
 
-### 6. Grading Interface
+### Grading Interface
 **File:** [grading-interface.html](grading-interface.html)
 
 **Demonstrates:**
