@@ -22,6 +22,7 @@ An integrated digital platform designed to support course delivery, student enga
 - [Use Cases](#use-cases)
 - [Use Case Diagram](#use-case-diagram)
 - [Installation](#installation)
+- [Data Access Layer](#data-access-layer)
 - [Features](#features)
 - [Contributing](#contributing)
 
@@ -644,12 +645,285 @@ Submit Assignments → View Grades → Track Progress
 
 5. **Start the server:**
    ```bash
-   npm run dev  # Development mode with nodemon
-   npm start    # Production mode
+   npm test     # Development mode (runs: node app.js dev)
+   npm start    # Production mode (runs: node app.js prod)
    ```
 
 6. **Access the application:**
    Open your browser and navigate to `http://localhost:3000`
+
+---
+
+## Data Access Layer
+
+### Architecture Overview
+
+The Data Access Layer implements a layered architecture pattern to manage data retrieval and persistence:
+
+```
+Routes (/src/routes/api.js)
+    ↓
+Controllers (/src/controllers/dataAccessController.js)
+    ↓
+Models (/src/models/)
+    ↓
+Mock Repository (/src/data/mockRepository.js)
+```
+
+### Data Model Classes
+
+The system implements six core domain models with complete business logic:
+
+**Data Model Code Implementation:**
+
+![Data Model Classes Code](images/class_model_code.png)
+
+#### 1. **User.js** - User Account Management
+- **Properties:** userId, firstName, lastName, email, role (Student/Instructor/Admin), createdAt
+- **Methods:** 
+  - `getFullName()` - Returns full name
+  - `isInstructor()` - Role-based check
+  - `isStudent()` - Role-based check
+  - `toJSON()` - Serialization for API responses
+
+#### 2. **Course.js** - Course Definition and Management
+- **Properties:** courseId, title, description, instructorId, maxEnrollment, Credits, publishedAt, status, startDate, endDate
+- **Methods:**
+  - `publish()` - Marks course as published
+  - `unpublish()` - Marks course as unpublished
+  - `isActive()` - Checks if course is available
+  - `getDurationInWeeks()` - Calculates course duration
+  - `toJSON()` - API serialization
+
+#### 3. **Enrollment.js** - Student Course Registration
+- **Properties:** enrollmentId, studentId, courseId, enrollmentDate, grade, completionPercentage, status
+- **Methods:**
+  - `setGrade(points, maxPoints)` - Records numeric grade
+  - `getLetterGrade()` - Converts to A-F scale
+  - `updateCompletion(percentage)` - Updates progress
+  - `markCompleted()` - Finalizes enrollment
+  - `drop()` - Removes from course
+  - `toJSON()` - API serialization
+
+#### 4. **Assignment.js** - Assignment Creation and Tracking
+- **Properties:** assignmentId, courseId, title, description, dueDate, maxPoints, publishedAt
+- **Methods:**
+  - `publish()` - Makes assignment visible to students
+  - `isDue()` - Checks if deadline has passed
+  - `getDaysUntilDue()` - Calculates remaining time
+  - `isLateSubmission(submissionDate)` - Flags late submissions
+  - `toJSON()` - API serialization
+
+#### 5. **Submission.js** - Student Assignment Submissions
+- **Properties:** submissionId, assignmentId, studentId, submissionDate, filePath, status, isLate
+- **Methods:**
+  - `markGraded(grade)` - Records grade
+  - `isPending()` - Checks grading status
+  - `markLate()` - Flags late submission
+  - `toJSON()` - API serialization
+
+#### 6. **Grade.js** - Instructor Grading Record
+- **Properties:** gradeId, submissionId, instructorId, points, feedback, comments, gradedAt
+- **Methods:**
+  - `addComments(text)` - Adds instructor comments
+  - `addFeedback(text)` - Adds detailed feedback
+  - `getPercentage(maxPoints)` - Calculates percentage score
+  - `getLetterGrade(maxPoints)` - Converts to letter grade
+  - `toJSON()` - API serialization
+
+### Sample Data
+
+The MockRepository (/src/data/mockRepository.js) provides realistic sample data:
+
+- **Users:** 6 users (1 admin, 2 instructors, 3 students)
+- **Courses:** 3 published courses (CS 101, MATH 201, BUS 301)
+- **Enrollments:** 7 student enrollments across courses with grades (87-95%)
+- **Assignments:** 4 assignments with various due dates and max points
+- **Submissions:** 5 student submissions (4 graded, 1 pending)
+- **Grades:** 5 grading records with instructor feedback
+
+### API Endpoints
+
+All endpoints are prefixed with `/api` and return JSON responses with standardized format:
+```json
+{
+  "success": true,
+  "message": "Description of action",
+  "data": { /* entity or array of entities */ },
+  "count": 6,
+  "timestamp": "2026-03-24T13:04:01.069Z"
+}
+```
+
+#### System Statistics
+- **GET** `/api/stats` - Retrieve system-wide statistics (total users, courses, enrollments, etc.)
+
+#### User Management
+- **GET** `/api/users` - Retrieve all users (count: 6)
+- **GET** `/api/users/:userId` - Retrieve specific user by ID
+
+#### Course Management
+- **GET** `/api/courses` - Retrieve all courses (count: 3)
+- **GET** `/api/courses/:courseId` - Retrieve specific course with enrollment and assignment counts
+- **GET** `/api/instructors/:instructorId/courses` - Retrieve courses taught by instructor
+
+#### Enrollment Management
+- **GET** `/api/enrollments` - Retrieve all enrollments (count: 7)
+- **GET** `/api/students/:studentId/enrollments` - Retrieve student's course enrollments
+- **GET** `/api/courses/:courseId/enrollments` - Retrieve all student enrollments in a course
+
+#### Assignment Management
+- **GET** `/api/assignments` - Retrieve all assignments (count: 4)
+- **GET** `/api/courses/:courseId/assignments` - Retrieve assignments for a specific course
+
+#### Submission Management
+- **GET** `/api/submissions` - Retrieve all submissions (count: 5)
+- **GET** `/api/assignments/:assignmentId/submissions` - Retrieve submissions for an assignment
+- **GET** `/api/students/:studentId/submissions` - Retrieve student's submissions
+
+#### Grade Management
+- **GET** `/api/grades` - Retrieve all grades (count: 5)
+- **GET** `/api/instructors/:instructorId/grades` - Retrieve grades assigned by instructor
+
+### Testing the API
+
+Start the development server:
+```bash
+npm test  # Or: node app.js dev
+```
+
+Access the API at: `http://localhost:8080/api/*`
+
+Example requests:
+```bash
+# Get system statistics
+curl http://localhost:8080/api/stats
+
+# Get all users
+curl http://localhost:8080/api/users
+
+# Get specific course
+curl http://localhost:8080/api/courses/1
+
+# Get student enrollments
+curl http://localhost:8080/api/students/1/enrollments
+```
+
+### API Response Examples
+
+**Live API Endpoint Screenshots:**
+
+These screenshots demonstrate the API endpoints responding with live sample data:
+
+![API /stats Endpoint](images/stats.png)
+
+![API /users Endpoint](images/users.png)
+
+![API /courses Endpoint](images/courses.png)
+
+![API /enrollments Endpoint](images/enrollments.png)
+
+**Sample JSON Responses:**
+
+#### /api/stats Response
+```json
+{
+  "success": true,
+  "message": "System statistics retrieved successfully",
+  "data": {
+    "totalUsers": 6,
+    "totalCourses": 3,
+    "totalEnrollments": 7,
+    "totalAssignments": 4,
+    "totalSubmissions": 5,
+    "totalGrades": 5,
+    "averageGrade": 90.2
+  },
+  "timestamp": "2026-03-24T13:04:01.069Z"
+}
+```
+
+#### /api/users Response
+```json
+{
+  "success": true,
+  "message": "Retrieved 6 users",
+  "data": [
+    {
+      "userId": 1,
+      "firstName": "John",
+      "lastName": "Smith",
+      "email": "john.smith@university.edu",
+      "fullName": "John Smith",
+      "role": "Student",
+      "createdAt": "2026-03-24T13:04:01.069Z"
+    },
+    {
+      "userId": 3,
+      "firstName": "Sarah",
+      "lastName": "Williams",
+      "email": "sarah.williams@university.edu",
+      "fullName": "Sarah Williams",
+      "role": "Instructor",
+      "createdAt": "2026-03-24T13:04:01.069Z"
+    }
+  ],
+  "count": 6
+}
+```
+
+#### /api/courses Response
+```json
+{
+  "success": true,
+  "message": "Retrieved 3 courses",
+  "data": [
+    {
+      "courseId": 1,
+      "title": "CS 101",
+      "description": "Introduction to Computer Science",
+      "instructorId": 3,
+      "credits": 3,
+      "maxEnrollment": 40,
+      "status": "Published",
+      "startDate": "2026-01-15",
+      "endDate": "2026-04-30",
+      "enrollmentCount": 3,
+      "assignmentCount": 2
+    }
+  ],
+  "count": 3
+}
+```
+
+#### /api/students/1/enrollments Response
+```json
+{
+  "success": true,
+  "message": "Retrieved 2 enrollments for student 1",
+  "data": [
+    {
+      "enrollmentId": 1,
+      "studentId": 1,
+      "courseId": 1,
+      "enrollmentDate": "2026-02-01",
+      "grade": 87,
+      "completionPercentage": 75,
+      "status": "Active"
+    },
+    {
+      "enrollmentId": 4,
+      "studentId": 1,
+      "courseId": 3,
+      "enrollmentDate": "2026-02-05",
+      "grade": 92,
+      "completionPercentage": 85,
+      "status": "Active"
+    }
+  ],
+  "count": 2
+}
+```
 
 ---
 

@@ -37,7 +37,6 @@ async function get_request(
 		Accept: "application/json",
 	}
 ) {
-	// create config variable for GET request with no body length constraints
 	var config = {
 		method: "get",
 		maxBodyLength: Infinity,
@@ -49,7 +48,9 @@ async function get_request(
 		var response = await axios.request(config);
 		return { success: true, data: response.data, config: config };
 	} catch (err) {
-		return { success: false, data: err.response.data, config: config };
+		// Handle both HTTP errors (with response) and network errors (without response)
+		const errorData = err.response ? err.response.data : err.message;
+		return { success: false, data: errorData, config: config };
 	}
 }
 
