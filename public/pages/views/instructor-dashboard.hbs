@@ -1,0 +1,82 @@
+<div class="container mt-5">
+  <div class="page-header">
+    <div>
+      <h2>Instructor Dashboard</h2>
+      <p class="text-muted mb-0">Welcome, {{user.firstName}} {{user.lastName}}</p>
+    </div>
+    <div class="btn-group-header">
+      <a href="/create" class="btn btn-primary btn-sm">+ Create Course</a>
+      <a href="/auth/logout" class="btn btn-outline-secondary btn-sm">Logout</a>
+    </div>
+  </div>
+
+  <div class="row mb-4 g-3">
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm text-center h-100">
+        <div class="card-body">
+          <p class="text-muted mb-2">Total Courses</p>
+          <h3 class="text-primary">{{courseCount}}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm text-center h-100">
+        <div class="card-body">
+          <p class="text-muted mb-2">Total Enrollments</p>
+          <h3 class="text-primary">{{totalEnrollments}}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm text-center h-100">
+        <div class="card-body">
+          <h5 class="card-title">Total Assignments</h5>
+          <h2>{{totalAssignments}}</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {{#if courses.length}}
+    <h4 class="text-dark mb-4">Your Courses</h4>
+    <div class="row g-3">
+      {{#each courses}}
+        <div class="col-md-6 mb-3">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">{{title}}</h5>
+              <p class="card-text">{{description}}</p>
+              
+              <p class="mb-2">
+                <span class="badge {{#if isPublished}}badge-success{{else}}badge-secondary{{/if}}">
+                  {{#if isPublished}}Published{{else}}Draft{{/if}}
+                </span>
+                <span class="badge {{#if isActive}}badge-info{{else}}badge-warning{{/if}}">
+                  {{#if isActive}}Active{{else}}Inactive{{/if}}
+                </span>
+              </p>
+
+              <p class="mb-3">
+                <strong>Enrollments:</strong> {{enrollmentCount}} | 
+                <strong>Assignments:</strong> {{assignmentCount}} | 
+                <strong>Submissions:</strong> {{submissionCount}}
+              </p>
+
+              <p class="small text-muted mb-3">
+                {{startDate}} to {{endDate}}
+              </p>
+
+              <a href="/course/{{courseId}}" class="btn btn-sm btn-outline-primary">View</a>
+              <a href="/course/{{courseId}}/assignment/create" class="btn btn-sm btn-primary">New Assignment</a>
+              <a href="/course/{{courseId}}/upload" class="btn btn-sm btn-outline-secondary">Upload</a>
+            </div>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  {{else}}
+    <div class="alert alert-light border mt-4">
+      <p class="mb-0">You haven't created any courses. <a href="/create" class="alert-link">Create your first course</a> to get started.</p>
+    </div>
+  {{/if}}
+</div>

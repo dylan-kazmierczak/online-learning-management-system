@@ -1,0 +1,51 @@
+<div class="container mt-5">
+  <div class="page-header">
+    <div>
+      <h2>Student Dashboard</h2>
+      <p class="text-muted mb-0">Welcome, {{user.firstName}} {{user.lastName}}</p>
+    </div>
+    <div class="btn-group-header">
+      <a href="/enroll" class="btn btn-primary btn-sm">Enroll in Course</a>
+      <a href="/my-grades" class="btn btn-outline-secondary btn-sm">View Grades</a>
+      <a href="/auth/logout" class="btn btn-outline-secondary btn-sm">Logout</a>
+    </div>
+  </div>
+
+  {{#if enrollments.length}}
+    <div class="row">
+      {{#each enrollments}}
+        <div class="col-md-6 mb-3">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">{{courseTitle}}</h5>
+              <p class="card-text">{{courseDescription}}</p>
+              
+              <div class="progress mb-3" style="height: 8px;">
+                <div class="progress-bar bg-primary" role="progressbar" style="width: {{completionPercentage}}%" aria-valuenow="{{completionPercentage}}" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+
+              <p class="mb-2 small text-muted">
+                <strong>Progress:</strong> {{completionPercentage}}%
+              </p>
+              <p class="mb-3">
+                <strong>Assignments:</strong> {{assignmentCount}} | <strong>Submissions:</strong> {{submissionCount}}
+              </p>
+
+              <a href="/course/{{courseId}}" class="btn btn-sm btn-outline-primary">View Course</a>
+              {{#if (eq status 'Active')}}
+                <button class="btn btn-sm btn-outline-danger" onclick="if(confirm('Unenroll from this course?')) { document.getElementById('unenrollForm{{enrollmentId}}').submit(); }">Unenroll</button>
+                <form id="unenrollForm{{enrollmentId}}" method="POST" action="/unenroll" style="display:none;">
+                  <input type="hidden" name="enrollmentId" value="{{enrollmentId}}">
+                </form>
+              {{/if}}
+            </div>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  {{else}}
+    <div class="alert alert-light border mt-4">
+      <p class="mb-0">You are not enrolled in any courses. <a href="/enroll" class="alert-link">Enroll in a course</a> to get started.</p>
+    </div>
+  {{/if}}
+</div>

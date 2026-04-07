@@ -1,0 +1,95 @@
+<div class="container mt-5">
+  <div class="page-header">
+    <div>
+      <h2>My Grades</h2>
+      <p class="text-muted mb-0">Review your grades and feedback from assignments</p>
+    </div>
+    <a href="/student-dashboard" class="btn btn-outline-secondary btn-sm">← Back</a>
+  </div>
+
+  {{#if grades.length}}
+    <div class="table-responsive mt-4">
+      <table class="table table-hover border">
+        <thead class="table-light">
+          <tr>
+            <th>Course</th>
+            <th>Assignment</th>
+            <th>Points</th>
+            <th>Percentage</th>
+            <th>Grade</th>
+            <th>Status</th>
+            <th>Late?</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each grades}}
+            <tr onclick="document.getElementById('modal{{@index}}').click()" style="cursor: pointer;">
+              <td>{{courseTitle}}</td>
+              <td>{{assignmentTitle}}</td>
+              <td>{{#if pointsEarned}}{{pointsEarned}}/{{maxPoints}}{{else}}-{{/if}}</td>
+              <td>{{#if percentage}}{{percentage}}%{{else}}-{{/if}}</td>
+              <td>
+                {{#if letterGrade}}
+                  {{#if (eq letterGrade 'A')}}
+                    <span class="badge bg-success text-white">{{letterGrade}}</span>
+                  {{else if (eq letterGrade 'B')}}
+                    <span class="badge bg-info text-white">{{letterGrade}}</span>
+                  {{else if (eq letterGrade 'C')}}
+                    <span class="badge bg-warning text-white">{{letterGrade}}</span>
+                  {{else if (eq letterGrade 'D')}}
+                    <span class="badge bg-warning text-white">{{letterGrade}}</span>
+                  {{else if (eq letterGrade 'F')}}
+                    <span class="badge bg-danger text-white">{{letterGrade}}</span>
+                  {{/if}}
+                {{else}}
+                  -
+                {{/if}}
+              </td>
+              <td>{{#if (eq status 'Graded')}}<span class="badge bg-success text-white">{{status}}</span>{{else}}<span class="badge bg-warning text-white">{{status}}</span>{{/if}}</td>
+              <td>{{#if isLate}}<span class="badge bg-danger text-white">Yes</span>{{else}}<span class="badge bg-secondary text-white">No</span>{{/if}}</td>
+              <button id="modal{{@index}}" class="btn btn-sm btn-link" data-bs-toggle="modal" data-bs-target="#grade{{@index}}" style="display:none;"></button>
+            </tr>
+
+            <!-- Modal for details -->
+            <div class="modal fade" id="grade{{@index}}" tabindex="-1">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">{{assignmentTitle}}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body">
+                    <p><strong>Course:</strong> {{courseTitle}}</p>
+                    <p><strong>Points:</strong> {{#if pointsEarned}}{{pointsEarned}}/{{maxPoints}} ({{percentage}}%){{else}}Not graded yet{{/if}}</p>
+                    <p><strong>Grade:</strong> {{#if letterGrade}}<span class="badge bg-success text-white">{{letterGrade}}</span>{{else}}Pending{{/if}}</p>
+                    <p><strong>Submitted:</strong> {{submittedAt}}</p>
+                    {{#if isLate}}<p><span class="badge bg-danger text-white">Late Submission</span></p>{{/if}}
+                    
+                    {{#if comments}}
+                      <hr>
+                      <h6>Comments:</h6>
+                      <p>{{comments}}</p>
+                    {{/if}}
+
+                    {{#if feedback}}
+                      <hr>
+                      <h6>Feedback:</h6>
+                      <p>{{feedback}}</p>
+                    {{/if}}
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  {{else}}
+    <div class="alert alert-light border mt-4">
+      <p class="mb-0 text-muted">No grades yet. Submit assignments to get started!</p>
+    </div>
+  {{/if}}
+</div>

@@ -1,0 +1,63 @@
+<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1rem;">
+  <div style="width: 550px;">
+    <div class="card border-0" style="margin-bottom: 2rem;">
+      <div class="card-body">
+        <!-- Logo Section -->
+        <div class="text-center mb-3">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">🎓</div>
+          <h2 class="text-center mb-2">Welcome Back</h2>
+          <p class="text-muted text-center">Sign in to your LMS account</p>
+        </div>
+
+        {{#if error}}
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Error:</strong> {{error}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {{/if}}
+
+        <form method="POST" action="/auth/login" class="mt-4">
+          <div class="mb-3">
+            <label for="userId" class="form-label">User ID</label>
+            <input type="number" class="form-control" id="userId" name="userId" required placeholder="Enter user ID">
+            <small class="form-text">Try: <strong>1</strong> (Student), <strong>3</strong> (Instructor)</small>
+          </div>
+
+          <div class="mb-4">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" required placeholder="Enter password">
+            <small class="form-text">Demo: any password works</small>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100 mb-3" style="padding: 0.875rem; font-size: 1rem;">
+            Sign In
+          </button>
+        </form>
+
+        <hr style="margin: 2rem 0; border: none; border-top: 2px solid rgba(16, 185, 129, 0.1);">
+
+        <p class="text-center text-muted mb-0">
+          Don't have an account? <a href="/auth/register" class="text-decoration-none fw-bold" style="color: var(--primary);">Create one</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- Demo Credentials Card -->
+    <div class="card border-0" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(249, 115, 22, 0.05) 100%); border: 2px solid rgba(16, 185, 129, 0.15);">
+      <div class="card-body">
+        <h6 class="mb-3" style="color: var(--primary); font-weight: 700;">Demo Credentials</h6>
+        <div style="font-size: 0.9rem;">
+          <div class="mb-2">
+            <strong style="color: var(--text);">Student:</strong> <code style="background: white; padding: 0.25rem 0.5rem; border-radius: 4px;">ID: 1</code>
+          </div>
+          <div>
+            <strong style="color: var(--text);">Instructor:</strong> <code style="background: white; padding: 0.25rem 0.5rem; border-radius: 4px;">ID: 3</code>
+          </div>
+          <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid rgba(16, 185, 129, 0.1);">
+            <strong style="color: var(--text);">Password:</strong> <span style="color: var(--text-light);">any password</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

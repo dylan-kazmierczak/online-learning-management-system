@@ -1,0 +1,72 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-8">
+      <h3 class="mb-2 text-dark">{{assignment.title}}</h3>
+      <p class="text-muted">{{course.title}}</p>
+
+      <div class="card mb-4 border-0 shadow-sm">
+        <div class="card-body">
+          <p class="text-muted">{{assignment.description}}</p>
+          
+          <hr>
+
+          <p class="mb-2"><strong>Due Date:</strong> {{assignment.dueDate}}</p>
+          <p class="mb-2"><strong>Max Points:</strong> {{assignment.maxPoints}}</p>
+          <p class="mb-3"><strong>Status:</strong> <span class="badge {{#if assignment.isDue}}bg-danger{{else}}bg-success{{/if}}">
+            {{#if assignment.isDue}}Overdue{{else}}Open ({{assignment.daysUntilDue}} days left){{/if}}
+          </span></p>
+
+          {{#if isInstructor}}
+            <p class="mb-3"><strong>Submissions:</strong> {{submissions.length}}</p>
+          {{/if}}
+
+          {{#unless isInstructor}}
+            {{#if studentSubmission}}
+              <div class="alert alert-light border border-success">
+                <p class="mb-0"><strong>✓ You submitted on {{studentSubmission.submittedAt}}</strong></p>
+                {{#if studentSubmission.isLate}}<span class="badge bg-warning mt-2">Late Submission</span>{{/if}}
+              </div>
+            {{else}}
+              <a href="/assignment/{{assignment.assignmentId}}/submit" class="btn btn-primary">Submit Assignment</a>
+            {{/if}}
+          {{/unless}}
+        </div>
+      </div>
+
+      {{#if isInstructor}}
+        <h4 class="text-dark mb-3">Student Submissions ({{submissions.length}})</h4>
+        {{#if submissions.length}}
+          <div class="table-responsive">
+            <table class="table table-hover border">
+              <thead class="table-light">
+                <tr>
+                  <th>Student</th>
+                  <th>Submitted</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each submissions}}
+                  <tr>
+                    <td>Student #{{studentId}}</td>
+                    <td>{{submittedAt}}</td>
+                    <td><span class="badge {{#if (eq status 'Graded')}}bg-success{{else}}bg-warning{{/if}}">{{status}}</span></td>
+                    <td><a href="/submission/{{submissionId}}/grade" class="btn btn-sm btn-outline-primary">Grade</a></td>
+                  </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+        {{else}}
+          <div class="alert alert-light border">
+            <p class="mb-0 text-muted">No submissions yet.</p>
+          </div>
+        {{/if}}
+      {{/if}}
+    </div>
+    <div class="col-md-4">
+      <a href="/course/{{course.courseId}}" class="btn btn-outline-secondary btn-sm w-100 mb-2">← Back to Course</a>
+    </div>
+  </div>
+</div>

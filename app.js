@@ -14,6 +14,7 @@ const express = require("express");
 const path = require("path");
 const exphbs = require("express-handlebars");
 const bodyParser = require("body-parser");
+const session = require("express-session");
 
 // create the app and configure the .env to choose a file based on the CLI input at time of run
 const app = express();
@@ -29,6 +30,14 @@ const port = process.env.PORT || 8080;
 const { logger } = require(path.join(__dirname, "/src/utils/winston_helper"));
 // import the axios api requester utility
 const requester = require(path.join(__dirname, "/src/utils/axios_helper"));
+
+// configure express-session for user sessions
+app.use(session({
+	secret: 'lms-secret-key-2026',
+	resave: false,
+	saveUninitialized: true,
+	cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 } // 24 hours
+}));
 
 // set the engine and handlebars and set the layouts directory and default layout file name
 app.engine(

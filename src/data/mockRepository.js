@@ -79,7 +79,40 @@ class MockRepository {
     );
     course3.publish();
 
-    return [course1, course2, course3];
+    const course4 = new Course(
+      4,
+      3, // Sarah Williams (Instructor)
+      'WEB 201: Web Development with React',
+      'Build dynamic web applications with React, JavaScript, and modern web technologies.',
+      new Date('2026-02-10'),
+      new Date('2026-06-10'),
+      30
+    );
+    course4.publish();
+
+    const course5 = new Course(
+      5,
+      4, // Michael Chen (Instructor)
+      'DATA 101: Data Science Fundamentals',
+      'Introduction to data science, machine learning, and statistical analysis with Python.',
+      new Date('2026-03-01'),
+      new Date('2026-07-01'),
+      25
+    );
+    course5.publish();
+
+    const course6 = new Course(
+      6,
+      6, // Robert Wilson (Instructor)
+      'ENG 150: Professional Writing & Communication',
+      'Develop essential communication skills for academic and professional success.',
+      new Date('2026-02-15'),
+      new Date('2026-05-15'),
+      45
+    );
+    course6.publish();
+
+    return [course1, course2, course3, course4, course5, course6];
   }
 
   /**

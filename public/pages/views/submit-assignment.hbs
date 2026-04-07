@@ -1,0 +1,31 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-8">
+      <h3 class="mb-4 text-dark">Submit: {{assignment.title}}</h3>
+
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <p class="text-muted">{{course.title}}</p>
+          <p class="mb-3"><strong>Due Date:</strong> {{assignment.dueDate}}</p>
+
+          {{#if existingSubmission}}
+            <div class="alert alert-light border border-info mb-4">
+              <p class="mb-0"><strong>ℹ️ Updated Submission:</strong> You can update your submission below.</p>
+            </div>
+          {{/if}}
+
+          <form method="POST" action="/assignment/{{assignmentId}}/submit">
+            <div class="form-group mb-4">
+              <label for="content" class="form-label">Your Submission</label>
+              <textarea class="form-control" id="content" name="content" rows="10" required>{{#if existingSubmission}}{{existingSubmission.textContent}}{{/if}}</textarea>
+              <small class="form-text text-muted">You can paste your code, text, or describe your work here.</small>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit Assignment</button>
+            <a href="/assignment/{{assignmentId}}" class="btn btn-outline-secondary">Cancel</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

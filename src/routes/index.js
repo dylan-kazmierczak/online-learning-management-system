@@ -13,12 +13,20 @@
 const { Router } = require("express");
 const { example_router } = require("./example");
 const { api_router } = require("./api");
+const { auth_router } = require("./auth");
+const { dashboard_router } = require("./dashboard");
+const { course_router } = require("./courses");
+const { assignment_router } = require("./assignments");
 
 // this is just the creation of the total router object that contains all routes
 // more ".use()" can be appended to add more custom routes to the router
 let total_routes = Router()
 	.use("/example", example_router)
-	.use("/api", api_router);
+	.use("/api", api_router)
+	.use("/auth", auth_router)
+	.use("/", dashboard_router)
+	.use("/", course_router)
+	.use("/", assignment_router);
 
 // export routes to be used elsewhere
 module.exports = { total_routes };

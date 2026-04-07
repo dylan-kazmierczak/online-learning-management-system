@@ -1,0 +1,56 @@
+<div class="container mt-5">
+  <div class="page-header">
+    <div>
+      <h2>{{course.title}}</h2>
+      <p class="text-muted mb-0">{{course.description}}</p>
+    </div>
+    <div class="btn-group-header">
+      {{#if isInstructor}}
+        <a href="/course/{{course.courseId}}/assignment/create" class="btn btn-primary btn-sm">New Assignment</a>
+        <a href="/course/{{course.courseId}}/upload" class="btn btn-outline-secondary btn-sm">Upload</a>
+      {{else if isEnrolled}}
+        <form method="POST" action="/unenroll" style="display:inline;">
+          <input type="hidden" name="enrollmentId" value="{{enrollmentId}}">
+          <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Unenroll from this course?')">Unenroll</button>
+        </form>
+      {{/if}}
+      <a href="{{#if isInstructor}}/instructor-dashboard{{else}}/student-dashboard{{/if}}" class="btn btn-outline-secondary btn-sm">Back</a>
+    </div>
+  </div>
+
+  <div class="row mb-4">
+    <div class="col-md-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <p class="mb-2"><strong>Status:</strong> <span class="badge {{#if course.isPublished}}bg-success{{else}}bg-secondary{{/if}}">{{#if course.isPublished}}Published{{else}}Draft{{/if}}</span></p>
+          <p class="mb-2"><strong>Enrollment Count:</strong> {{enrollmentCount}}</p>
+          <p class="mb-2"><strong>Duration:</strong> {{course.durationWeeks}} weeks</p>
+          <p class="mb-0"><strong>Enrollment Limit:</strong> {{course.enrollmentLimit}} students</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {{#if assignments.length}}
+    <h4 class="text-dark mb-4">Assignments</h4>
+    <div class="row g-3">
+      {{#each assignments}}
+        <div class="col-md-6 mb-3">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title text-dark">{{title}}</h5>
+              <p class="card-text text-muted">{{description}}</p>
+              <p class="small text-muted mb-2">Due: {{dueDate}}</p>
+              <p class="small mb-3"><strong>Max Points:</strong> {{maxPoints}}</p>
+              <a href="/assignment/{{assignmentId}}" class="btn btn-sm btn-outline-primary">View Assignment</a>
+            </div>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  {{else}}
+    <div class="alert alert-light border">
+      <p class="mb-0 text-muted">No assignments yet.</p>
+    </div>
+  {{/if}}
+</div>

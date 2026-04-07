@@ -1,0 +1,40 @@
+<div class="container mt-5">
+  <div class="page-header">
+    <div>
+      <h2>Enroll in a Course</h2>
+      <p class="text-muted mb-0">Browse and enroll in available courses</p>
+    </div>
+    <a href="/student-dashboard" class="btn btn-outline-secondary btn-sm">← Back</a>
+  </div>
+
+  <div class="row">
+
+      {{#if courses.length}}
+        <div class="row g-3">
+          {{#each courses}}
+            <div class="col-md-6 mb-3">
+              <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                  <h5 class="card-title text-dark">{{title}}</h5>
+                  <p class="card-text text-muted">{{description}}</p>
+                  <p class="small text-muted mb-3">{{enrollmentLimit}} student limit</p>
+                  <form method="POST" action="/enroll" style="display:inline;">
+                    <input type="hidden" name="courseId" value="{{courseId}}">
+                    <button type="submit" class="btn btn-primary btn-sm">Enroll Now</button>
+                  </form>
+                  <a href="/course/{{courseId}}" class="btn btn-outline-secondary btn-sm">View Details</a>
+                </div>
+              </div>
+            </div>
+          {{/each}}
+        </div>
+      {{else}}
+        <div class="alert alert-light border mb-4">
+          <p class="mb-0 text-muted">All available courses are already in your enrollment. Check back later for more courses!</p>
+        </div>
+      {{/if}}
+
+      <a href="/student-dashboard" class="btn btn-outline-secondary mt-3">← Back to Dashboard</a>
+    </div>
+  </div>
+</div>

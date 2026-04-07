@@ -1,0 +1,45 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-8">
+      <h3 class="mb-4 text-dark">Create Assignment: {{course.title}}</h3>
+
+      {{#if error}}
+        <div class="alert alert-danger mb-4">{{error}}</div>
+      {{/if}}
+
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <form method="POST" action="/course/{{courseId}}/assignment/create">
+            <div class="form-group mb-3">
+              <label for="title" class="form-label">Assignment Title</label>
+              <input type="text" class="form-control" id="title" name="title" required placeholder="e.g., Chapter 1 Quiz">
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="description" class="form-label">Description</label>
+              <textarea class="form-control" id="description" name="description" rows="5" required placeholder="Describe the assignment..."></textarea>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group mb-3">
+                  <label for="dueDate" class="form-label">Due Date</label>
+                  <input type="datetime-local" class="form-control" id="dueDate" name="dueDate" required>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group mb-4">
+                  <label for="maxPoints" class="form-label">Max Points</label>
+                  <input type="number" class="form-control" id="maxPoints" name="maxPoints" required value="100" min="1">
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Create Assignment</button>
+            <a href="/course/{{courseId}}" class="btn btn-outline-secondary">Cancel</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

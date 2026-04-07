@@ -1,0 +1,54 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-8">
+      <h3 class="mb-4 text-dark">Grade Submission</h3>
+
+      <div class="card mb-4 border-0 shadow-sm">
+        <div class="card-header bg-white border-bottom">
+          <h5 class="mb-2 text-dark">Assignment: {{assignment.title}}</h5>
+          <p class="mb-0 text-muted small">Course: {{course.title}}</p>
+        </div>
+        <div class="card-body">
+          <p><strong>Student:</strong> {{student.fullName}}</p>
+          <p><strong>Submitted:</strong> {{submission.submittedAt}}</p>
+          {{#if submission.isLate}}<p><span class="badge badge-warning">Late Submission</span></p>{{/if}}
+
+          <h6 class="mt-4">Student's Submission:</h6>
+          <div class="bg-light p-3 border rounded">
+            <pre>{{submission.textContent}}</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-bottom">
+          <h5 class="mb-0 text-dark">Assign Grade</h5>
+        </div>
+        <div class="card-body">
+          <form method="POST" action="/submission/{{submissionId}}/grade">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="pointsEarned">Points Earned</label>
+                <input type="number" class="form-control" id="pointsEarned" name="pointsEarned" required value="{{#if existingGrade}}{{existingGrade.pointsEarned}}{{/if}}" min="0" max="{{assignment.maxPoints}}">
+                <small class="form-text text-muted">Out of {{assignment.maxPoints}} points</small>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="comments">Comments</label>
+              <textarea class="form-control" id="comments" name="comments" rows="3">{{#if existingGrade}}{{existingGrade.comments}}{{/if}}</textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="feedback">Detailed Feedback</label>
+              <textarea class="form-control" id="feedback" name="feedback" rows="4">{{#if existingGrade}}{{existingGrade.feedback}}{{/if}}</textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save Grade</button>
+            <a href="/assignment/{{assignment.assignmentId}}" class="btn btn-outline-secondary">Cancel</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
