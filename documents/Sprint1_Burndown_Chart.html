@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sprint 1 Burndown Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 50%, #f0fdfa 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+        
+        h1 {
+            color: #10b981;
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+        }
+        
+        .subtitle {
+            color: #6b7280;
+            margin-bottom: 2rem;
+            font-size: 1.05rem;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 500px;
+            margin-bottom: 2rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(249, 115, 22, 0.05) 100%);
+            border: 2px solid rgba(16, 185, 129, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+        
+        .stat-card h3 {
+            color: #10b981;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+        
+        .stat-description {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+        }
+        
+        .data-table thead {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        
+        .data-table thead th {
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .data-table tbody td {
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .data-table tbody tr:hover {
+            background: #f9fafb;
+        }
+        
+        .data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .status-completed {
+            color: #10b981;
+            font-weight: 600;
+        }
+        
+        .status-inprogress {
+            color: #f97316;
+            font-weight: 600;
+        }
+        
+        .status-remaining {
+            color: #6b7280;
+            font-weight: 600;
+        }
+        
+        .legend {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+        
+        .summary {
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+            border-left: 5px solid #10b981;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .summary h3 {
+            color: #10b981;
+            margin-bottom: 1rem;
+        }
+        
+        .summary ul {
+            list-style: none;
+            color: #1f2937;
+        }
+        
+        .summary li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        
+        .summary li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 Sprint 1 Burndown Chart</h1>
+        <p class="subtitle">Online Learning Management System - LMS (18 Total Items)</p>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background: #10b981;"></div>
+                <span>Actual Sprint 1 Completion</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #f97316;"></div>
+                <span>Ideal Velocity</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #d1d5db; border: 2px dashed #6b7280;"></div>
+                <span>Deferred to Sprint 2</span>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="burndownChart"></canvas>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Sprint 1 Items</h3>
+                <div class="stat-value">18</div>
+                <div class="stat-description">All items planned</div>
+            </div>
+            <div class="stat-card">
+                <h3>Completed by Friday</h3>
+                <div class="stat-value">14</div>
+                <div class="stat-description">78% completion rate</div>
+            </div>
+            <div class="stat-card">
+                <h3>Deferred to Sprint 2</h3>
+                <div class="stat-value">4</div>
+                <div class="stat-description">Pri3 & Pri4 items</div>
+            </div>
+            <div class="stat-card">
+                <h3>Sprint Duration</h3>
+                <div class="stat-value">5 days</div>
+                <div class="stat-description">Mon - Fri</div>
+            </div>
+        </div>
+        
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Day</th>
+                    <th>Items Remaining</th>
+                    <th>Items Completed Today</th>
+                    <th>Ideal Remaining</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Monday</strong></td>
+                    <td><span class="status-inprogress">18</span></td>
+                    <td>0 (In Progress)</td>
+                    <td>18</td>
+                    <td><span class="status-inprogress">Sprint Started</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Tuesday</strong></td>
+                    <td><span class="status-remaining">15</span></td>
+                    <td>3 items</td>
+                    <td>14.4</td>
+                    <td><span class="status-completed">On Track ✓</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Wednesday</strong></td>
+                    <td><span class="status-remaining">12</span></td>
+                    <td>3 items</td>
+                    <td>10.8</td>
+                    <td><span class="status-completed">On Track ✓</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Thursday</strong></td>
+                    <td><span class="status-remaining">8</span></td>
+                    <td>4 items</td>
+                    <td>7.2</td>
+                    <td><span class="status-completed">Ahead of Schedule 🚀</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Friday</strong></td>
+                    <td><span class="status-completed">4</span></td>
+                    <td>4 items</td>
+                    <td>3.6</td>
+                    <td><span class="status-completed">4 Deferred to Sprint 2</span></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="summary">
+            <h3>Sprint 1 Summary</h3>
+            <ul>
+                <li><strong>18 total items planned</strong> - 14 Pri1/Pri2 + 4 Pri3/Pri4</li>
+                <li><strong>14 items completed by Friday</strong> - All priority 1 & 2 items done</li>
+                <li><strong>4 items deferred to Sprint 2</strong> - Pri3 & Pri4 items (Email, API Testing, Forums, Search)</li>
+                <li><strong>Steady completion rate</strong> - 3-4 items per day, finishing on schedule</li>
+                <li><strong>Sprint outcomes achieved</strong> - Core LMS features complete with modern design system</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        const ctx = document.getElementById('burndownChart').getContext('2d');
+        const burndownChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+                datasets: [
+                    {
+                        label: 'Actual Items Remaining',
+                        data: [18, 15, 12, 8, 4],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 6,
+                        pointBackgroundColor: '#10b981',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        segment: {
+                            borderDash: []
+                        }
+                    },
+                    {
+                        label: 'Ideal Velocity (Perfect 18→0)',
+                        data: [18, 13.5, 9, 4.5, 0],
+                        borderColor: '#f97316',
+                        backgroundColor: 'transparent',
+                        borderWidth: 2,
+                        fill: false,
+                        borderDash: [5, 5],
+                        tension: 0.4,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#f97316',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2
+                    },
+                    {
+                        label: 'Deferred to Sprint 2 (4 items)',
+                        data: [4, 4, 4, 4, 4],
+                        borderColor: '#d1d5db',
+                        backgroundColor: 'rgba(209, 213, 219, 0.1)',
+                        borderWidth: 2,
+                        fill: false,
+                        borderDash: [3, 3],
+                        tension: 0,
+                        pointRadius: 0
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            boxWidth: 15,
+                            padding: 15,
+                            font: {
+                                size: 13,
+                                family: "'Inter', sans-serif",
+                                weight: '600'
+                            },
+                            color: '#1f2937'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(31, 41, 55, 0.9)',
+                        padding: 12,
+                        titleFont: {
+                            size: 13,
+                            weight: '600'
+                        },
+                        bodyFont: {
+                            size: 12
+                        },
+                        cornerRadius: 8,
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.y + ' items';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 20,
+                        ticks: {
+                            stepSize: 2,
+                            font: {
+                                size: 12,
+                                family: "'Inter', sans-serif"
+                            },
+                            color: '#6b7280'
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)',
+                            drawBorder: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Work Remaining (Items)',
+                            font: {
+                                size: 13,
+                                weight: '600',
+                                family: "'Inter', sans-serif"
+                            },
+                            color: '#1f2937'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 12,
+                                family: "'Inter', sans-serif"
+                            },
+                            color: '#6b7280'
+                        },
+                        grid: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Sprint Days',
+                            font: {
+                                size: 13,
+                                weight: '600',
+                                family: "'Inter', sans-serif"
+                            },
+                            color: '#1f2937'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
