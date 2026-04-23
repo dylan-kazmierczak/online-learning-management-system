@@ -7,6 +7,35 @@
     <a href="/student-dashboard" class="btn btn-outline-secondary btn-sm">← Back</a>
   </div>
 
+  {{#if gpa}}
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm text-center p-3">
+        <div class="card-body">
+          <h6 class="text-muted mb-1">Overall Average</h6>
+          <h2 class="mb-0">{{gpa}}%</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm text-center p-3">
+        <div class="card-body">
+          <h6 class="text-muted mb-1">Graded Assignments</h6>
+          <h2 class="mb-0">{{gradedCount}}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm text-center p-3">
+        <div class="card-body">
+          <h6 class="text-muted mb-1">Total Submissions</h6>
+          <h2 class="mb-0">{{grades.length}}</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{/if}}
+
   {{#if grades.length}}
     <div class="table-responsive mt-4">
       <table class="table table-hover border">

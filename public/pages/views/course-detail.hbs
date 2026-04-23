@@ -9,12 +9,15 @@
         <a href="/course/{{course.courseId}}/assignment/create" class="btn btn-primary btn-sm">New Assignment</a>
         <a href="/course/{{course.courseId}}/upload" class="btn btn-outline-secondary btn-sm">Upload</a>
       {{else if isEnrolled}}
-        <form method="POST" action="/unenroll" style="display:inline;">
+        <form method="POST" action="/unenroll" style="display:inline; margin-block-end:0px;">
           <input type="hidden" name="enrollmentId" value="{{enrollmentId}}">
           <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Unenroll from this course?')">Unenroll</button>
         </form>
       {{/if}}
-      <a href="{{#if isInstructor}}/instructor-dashboard{{else}}/student-dashboard{{/if}}" class="btn btn-outline-secondary btn-sm">Back</a>
+      {{#if (or isInstructor isEnrolled)}}
+        <a href="/course/{{course.courseId}}/forum" class="btn btn-outline-success btn-sm">💬 Forum</a>
+      {{/if}}
+      <a href="{{#if isInstructor}}/instructor-dashboard{{else}}/student-dashboard{{/if}}" class="btn btn-outline-secondary btn-sm">← Back</a>
     </div>
   </div>
 
@@ -22,9 +25,9 @@
     <div class="col-md-12">
       <div class="card border-0 shadow-sm">
         <div class="card-body">
-          <p class="mb-2"><strong>Status:</strong> <span class="badge {{#if course.isPublished}}bg-success{{else}}bg-secondary{{/if}}">{{#if course.isPublished}}Published{{else}}Draft{{/if}}</span></p>
+          <p class="mb-2"><strong>Status:</strong> <span class="text-white badge {{#if course.isPublished}}bg-success{{else}}bg-secondary{{/if}}">{{#if course.isPublished}}Published{{else}}Draft{{/if}}</span></p>
           <p class="mb-2"><strong>Enrollment Count:</strong> {{enrollmentCount}}</p>
-          <p class="mb-2"><strong>Duration:</strong> {{course.durationWeeks}} weeks</p>
+          <p class="mb-2"><strong>Duration:</strong> {{durationWeeks}} weeks</p>
           <p class="mb-0"><strong>Enrollment Limit:</strong> {{course.enrollmentLimit}} students</p>
         </div>
       </div>

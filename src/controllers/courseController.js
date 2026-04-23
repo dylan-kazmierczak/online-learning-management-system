@@ -6,6 +6,7 @@
 const { mockRepository } = require('../data/mockRepository');
 const { Course } = require('../models/Course');
 const { Enrollment } = require('../models/Enrollment');
+const { sendEnrollmentNotification } = require('../utils/email_helper');
 
 class CourseController {
   /**
@@ -35,6 +36,15 @@ class CourseController {
         });
       }
 
+      // Validate date range
+      if (new Date(endDate) <= new Date(startDate)) {
+        return res.render('create-course', {
+          error: 'End date must be after start date',
+          title: 'Create Course',
+          user: req.session.user
+        });
+      }
+
       // Create new course
       const newCourseId = Math.max(...mockRepository.getAllCourses().map(c => c.courseId)) + 1;
       const newCourse = new Course(
@@ -50,6 +60,7 @@ class CourseController {
 
       mockRepository.courses.push(newCourse);
 
+      req.session.flash = { success: `Course "${title}" created successfully!` };
       res.redirect(`/course/${newCourseId}`);
     } catch (error) {
       res.render('create-course', {
@@ -90,7 +101,8 @@ class CourseController {
         assignments: assignments,
         isEnrolled: isEnrolled,
         enrollmentId: studentEnrollment ? studentEnrollment.enrollmentId : null,
-        isInstructor: isInstructor
+        isInstructor: isInstructor,
+        durationWeeks: course.getDurationInWeeks()
       });
     } catch (error) {
       res.render('error', {
@@ -101,18 +113,43 @@ class CourseController {
   }
 
   /**
-   * Get enroll course page
+   * Get enroll course page with search and filter support
    */
   static getEnrollPage(req, res) {
-    const courses = mockRepository.getAllCourses().filter(c => c.isPublished);
+    const { search = '', instructor: instructorFilter = '' } = req.query;
+
+    const allCourses = mockRepository.getAllCourses().filter(c => c.isPublished);
     const studentEnrollments = mockRepository.getEnrollmentsByStudent(req.session.user.userId);
     const enrolledCourseIds = studentEnrollments.map(e => e.courseId);
-    const availableCourses = courses.filter(c => !enrolledCourseIds.includes(c.courseId));
+    let availableCourses = allCourses.filter(c => !enrolledCourseIds.includes(c.courseId));
+
+    // Search by title or description
+    if (search.trim()) {
+      const term = search.trim().toLowerCase();
+      availableCourses = availableCourses.filter(c =>
+        c.title.toLowerCase().includes(term) ||
+        c.description.toLowerCase().includes(term)
+      );
+    }
+
+    // Filter by instructor
+    if (instructorFilter) {
+      availableCourses = availableCourses.filter(c => c.instructorId === parseInt(instructorFilter));
+    }
+
+    // Build instructor list for filter dropdown
+    const instructors = mockRepository.getAllUsers()
+      .filter(u => u.role === 'Instructor')
+      .map(u => ({ userId: u.userId, name: `${u.firstName} ${u.lastName}` }));
 
     res.render('enroll-course', {
       title: 'Enroll in Course',
       user: req.session.user,
-      courses: availableCourses
+      courses: availableCourses,
+      instructors,
+      search,
+      selectedInstructor: instructorFilter,
+      resultCount: availableCourses.length
     });
   }
 
@@ -153,6 +190,19 @@ class CourseController {
       );
 
       mockRepository.enrollments.push(newEnrollment);
+
+      // Send enrollment confirmation email (non-blocking)
+      const student = mockRepository.getUserById(studentId);
+      const enrolledCourse = mockRepository.getCourseById(parseInt(courseId));
+      if (student && enrolledCourse) {
+        sendEnrollmentNotification(
+          student.email,
+          `${student.firstName} ${student.lastName}`,
+          enrolledCourse.title
+        ).catch(() => {});
+      }
+
+      req.session.flash = { success: `Successfully enrolled in "${enrolledCourse ? enrolledCourse.title : 'course'}"!` };
       res.redirect(`/course/${courseId}`);
     } catch (error) {
       res.render('error', {

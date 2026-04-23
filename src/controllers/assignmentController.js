@@ -7,6 +7,7 @@ const { mockRepository } = require('../data/mockRepository');
 const { Assignment } = require('../models/Assignment');
 const { Submission } = require('../models/Submission');
 const { Grade } = require('../models/Grade');
+const { sendSubmissionNotification, sendGradeNotification } = require('../utils/email_helper');
 
 class AssignmentController {
   /**
@@ -71,6 +72,7 @@ class AssignmentController {
       newAssignment.publish();
 
       mockRepository.assignments.push(newAssignment);
+      req.session.flash = { success: `Assignment "${title}" created successfully!` };
       res.redirect(`/course/${courseId}`);
     } catch (error) {
       res.render('create-assignment', {
@@ -206,6 +208,21 @@ class AssignmentController {
         submission.markLate();
       }
 
+      // Notify instructor of new submission (non-blocking)
+      const course = mockRepository.getCourseById(assignment.courseId);
+      const instructor = course ? mockRepository.getUserById(course.instructorId) : null;
+      const student = mockRepository.getUserById(studentId);
+      if (instructor && student) {
+        sendSubmissionNotification(
+          instructor.email,
+          `${instructor.firstName} ${instructor.lastName}`,
+          `${student.firstName} ${student.lastName}`,
+          assignment.title,
+          course.title
+        ).catch(() => {});
+      }
+
+      req.session.flash = { success: 'Assignment submitted successfully!' };
       res.redirect(`/assignment/${assignmentId}`);
     } catch (error) {
       res.render('error', {
@@ -302,6 +319,22 @@ class AssignmentController {
       if (feedback) grade.addFeedback(feedback);
 
       const assignment = mockRepository.getAllAssignments().find(a => a.assignmentId === submission.assignmentId);
+
+      // Notify student their grade is posted (non-blocking)
+      const course = mockRepository.getCourseById(assignment.courseId);
+      const student = mockRepository.getUserById(submission.studentId);
+      if (student && course) {
+        sendGradeNotification(
+          student.email,
+          `${student.firstName} ${student.lastName}`,
+          assignment.title,
+          course.title,
+          parseInt(pointsEarned),
+          assignment.maxPoints
+        ).catch(() => {});
+      }
+
+      req.session.flash = { success: `Grade posted: ${pointsEarned}/${assignment.maxPoints} points.` };
       res.redirect(`/assignment/${assignment.assignmentId}`);
     } catch (error) {
       res.render('error', {
@@ -342,10 +375,17 @@ class AssignmentController {
         };
       });
 
+      const gradedGrades = grades.filter(g => g.percentage !== null);
+      const gpa = gradedGrades.length
+        ? Math.round(gradedGrades.reduce((sum, g) => sum + g.percentage, 0) / gradedGrades.length)
+        : null;
+
       res.render('student-grades', {
         title: 'My Grades',
         user: req.session.user,
-        grades: grades
+        grades: grades,
+        gpa: gpa,
+        gradedCount: gradedGrades.length
       });
     } catch (error) {
       res.render('error', {

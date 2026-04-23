@@ -10,6 +10,7 @@ const { Enrollment } = require('../models/Enrollment');
 const { Assignment } = require('../models/Assignment');
 const { Submission } = require('../models/Submission');
 const { Grade } = require('../models/Grade');
+const { Discussion } = require('../models/Discussion');
 
 class MockRepository {
   constructor() {
@@ -26,6 +27,7 @@ class MockRepository {
     this.assignments = this.createMockAssignments();
     this.submissions = this.createMockSubmissions();
     this.grades = this.createMockGrades();
+    this.discussions = this.createMockDiscussions();
   }
 
   /**
@@ -388,6 +390,39 @@ class MockRepository {
       activeInstructors: this.users.filter(u => u.isInstructor()).length,
       activeStudents: this.users.filter(u => u.isStudent()).length
     };
+  }
+
+  /**
+   * Create mock discussion posts
+   */
+  createMockDiscussions() {
+    const d1 = new Discussion(1, 1, 1, 'Question about assignment 1', 'I am having trouble understanding the calculator requirements. Can someone clarify what operations need to be supported?', new Date('2026-03-10T09:00:00'));
+    d1.addReply(1, 3, 'Great question! You need to support +, -, *, and /. Feel free to add more for extra credit.');
+    d1.addReply(2, 2, 'I found the project description PDF helpful. Check the resources section!');
+
+    const d2 = new Discussion(2, 1, 3, 'Welcome to CS 101!', 'Welcome everyone to Introduction to Programming! Feel free to use this forum to ask questions and collaborate.', new Date('2026-01-15T08:00:00'));
+    d2.pin();
+
+    const d3 = new Discussion(3, 2, 2, 'Calculus study group?', 'Anyone interested in forming a study group for the upcoming integration problem set?', new Date('2026-03-15T14:00:00'));
+    d3.addReply(3, 5, 'I am in! Let us meet on Thursday evenings.');
+
+    return [d1, d2, d3];
+  }
+
+  /**
+   * Get discussions for a course
+   */
+  getDiscussionsByCourse(courseId) {
+    return this.discussions
+      .filter(d => d.courseId === courseId)
+      .sort((a, b) => b.isPinned - a.isPinned || b.createdAt - a.createdAt);
+  }
+
+  /**
+   * Get a single discussion by ID
+   */
+  getDiscussionById(discussionId) {
+    return this.discussions.find(d => d.discussionId === discussionId) || null;
   }
 }
 

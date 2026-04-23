@@ -7,34 +7,61 @@
     <a href="/student-dashboard" class="btn btn-outline-secondary btn-sm">← Back</a>
   </div>
 
-  <div class="row">
-
-      {{#if courses.length}}
-        <div class="row g-3">
-          {{#each courses}}
-            <div class="col-md-6 mb-3">
-              <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                  <h5 class="card-title text-dark">{{title}}</h5>
-                  <p class="card-text text-muted">{{description}}</p>
-                  <p class="small text-muted mb-3">{{enrollmentLimit}} student limit</p>
-                  <form method="POST" action="/enroll" style="display:inline;">
-                    <input type="hidden" name="courseId" value="{{courseId}}">
-                    <button type="submit" class="btn btn-primary btn-sm">Enroll Now</button>
-                  </form>
-                  <a href="/course/{{courseId}}" class="btn btn-outline-secondary btn-sm">View Details</a>
-                </div>
-              </div>
-            </div>
+  <!-- Search & Filter -->
+  <form method="GET" action="/enroll" class="mb-4">
+    <div class="row g-3 align-items-end">
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Search Courses</label>
+        <input
+          type="text"
+          name="search"
+          class="form-control"
+          placeholder="Search by title or description..."
+          value="{{search}}"
+        />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label fw-semibold">Filter by Instructor</label>
+        <select name="instructor" class="form-select">
+          <option value="">All Instructors</option>
+          {{#each instructors}}
+            <option value="{{userId}}" {{#if (eq (toString userId) ../selectedInstructor)}}selected{{/if}}>
+              {{name}}
+            </option>
           {{/each}}
-        </div>
-      {{else}}
-        <div class="alert alert-light border mb-4">
-          <p class="mb-0 text-muted">All available courses are already in your enrollment. Check back later for more courses!</p>
-        </div>
-      {{/if}}
-
-      <a href="/student-dashboard" class="btn btn-outline-secondary mt-3">← Back to Dashboard</a>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">Search</button>
+      </div>
     </div>
-  </div>
+  </form>
+
+  <!-- Results count -->
+  <p class="text-muted mb-3"><strong>{{resultCount}}</strong> course(s) found</p>
+
+  {{#if courses.length}}
+    <div class="row g-3">
+      {{#each courses}}
+        <div class="col-md-6 mb-3">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title text-dark">{{title}}</h5>
+              <p class="card-text text-muted">{{description}}</p>
+              <p class="small text-muted mb-3">{{enrollmentLimit}} student limit</p>
+              <form method="POST" action="/enroll" style="display:inline;">
+                <input type="hidden" name="courseId" value="{{courseId}}">
+                <button type="submit" class="btn btn-primary btn-sm">Enroll Now</button>
+              </form>
+              <a href="/course/{{courseId}}" class="btn btn-outline-secondary btn-sm">View Details</a>
+            </div>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  {{else}}
+    <div class="alert alert-light border mb-4">
+      <p class="mb-0 text-muted">No courses match your search. Try different keywords or clear filters.</p>
+    </div>
+  {{/if}}
 </div>

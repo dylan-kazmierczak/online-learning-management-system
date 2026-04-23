@@ -17,6 +17,7 @@ const { auth_router } = require("./auth");
 const { dashboard_router } = require("./dashboard");
 const { course_router } = require("./courses");
 const { assignment_router } = require("./assignments");
+const { forum_router } = require("./forum");
 
 // this is just the creation of the total router object that contains all routes
 // more ".use()" can be appended to add more custom routes to the router
@@ -26,7 +27,8 @@ let total_routes = Router()
 	.use("/auth", auth_router)
 	.use("/", dashboard_router)
 	.use("/", course_router)
-	.use("/", assignment_router);
+	.use("/", assignment_router)
+	.use("/", forum_router);
 
 // export routes to be used elsewhere
 module.exports = { total_routes };

@@ -1,0 +1,104 @@
+<div class="container mt-5">
+  <div class="page-header">
+    <div>
+      <h2>💬 {{course.title}} - Forum</h2>
+      <p class="text-muted mb-0">Ask questions and collaborate with classmates</p>
+    </div>
+    <div class="btn-group-header">
+      <a href="/course/{{course.courseId}}" class="btn btn-outline-secondary btn-sm">← Back to Course</a>
+    </div>
+  </div>
+
+  <!-- New Post Form -->
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+      <h5 class="card-title mb-3">Start a New Discussion</h5>
+      <form method="POST" action="/course/{{course.courseId}}/forum">
+        <div class="mb-3">
+          <input
+            type="text"
+            name="title"
+            class="form-control"
+            placeholder="Discussion title..."
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <textarea
+            name="content"
+            class="form-control"
+            rows="3"
+            placeholder="Write your question or post..."
+            required
+          ></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Post Discussion</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Discussions List -->
+  {{#if discussions.length}}
+    {{#each discussions}}
+      <div class="card border-0 shadow-sm mb-3 {{#if isPinned}}border-start border-warning border-3{{/if}}">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <div>
+              {{#if isPinned}}<span class="badge bg-warning text-dark me-2">📌 Pinned</span>{{/if}}
+              <strong class="fs-5">{{title}}</strong>
+            </div>
+            <div class="d-flex gap-2">
+              {{#if ../isInstructor}}
+                <form method="POST" action="/course/{{../course.courseId}}/forum/{{discussionId}}/pin">
+                  <button type="submit" class="btn btn-sm {{#if isPinned}}btn-warning{{else}}btn-outline-warning{{/if}}">
+                    {{#if isPinned}}Unpin{{else}}📌 Pin{{/if}}
+                  </button>
+                </form>
+              {{/if}}
+              {{#if (eq authorId ../user.userId)}}
+                <form method="POST" action="/course/{{../course.courseId}}/forum/{{discussionId}}/delete">
+                  <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this discussion?')">Delete</button>
+                </form>
+              {{else if ../isInstructor}}
+                <form method="POST" action="/course/{{../course.courseId}}/forum/{{discussionId}}/delete">
+                  <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this discussion?')">Delete</button>
+                </form>
+              {{/if}}
+            </div>
+          </div>
+          <p class="text-muted small mb-2">Posted by <strong>{{authorName}}</strong></p>
+          <p class="mb-3">{{content}}</p>
+
+          <!-- Replies -->
+          {{#if replies.length}}
+            <div class="ms-3 border-start ps-3 mb-3">
+              {{#each replies}}
+                <div class="mb-2">
+                  <p class="mb-1 small text-muted"><strong>{{authorName}}</strong></p>
+                  <p class="mb-0">{{content}}</p>
+                </div>
+                {{#unless @last}}<hr class="my-2">{{/unless}}
+              {{/each}}
+            </div>
+          {{/if}}
+
+          <!-- Reply Form -->
+          <form method="POST" action="/course/{{../course.courseId}}/forum/{{discussionId}}/reply" class="d-flex gap-2 mt-2">
+            <input
+              type="text"
+              name="content"
+              class="form-control form-control-sm"
+              placeholder="Write a reply..."
+              required
+            />
+            <button type="submit" class="btn btn-sm btn-outline-primary">Reply</button>
+          </form>
+        </div>
+      </div>
+    {{/each}}
+  {{else}}
+    <div class="alert alert-light border">
+      <p class="mb-0 text-muted">No discussions yet. Start the conversation!</p>
+    </div>
+  {{/if}}
+</div>

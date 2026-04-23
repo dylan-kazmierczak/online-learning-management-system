@@ -284,6 +284,18 @@
 				color: white;
 			}
 
+			.btn-outline-success {
+				border: 2px solid var(--primary);
+				color: var(--primary);
+				background: transparent;
+			}
+
+			.btn-outline-success:hover {
+				background: var(--primary);
+				color: white;
+				box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+			}
+
 			.btn-outline-danger {
 				border: 2px solid #ef4444;
 				color: #ef4444;
@@ -336,7 +348,6 @@
 				border-radius: 6px;
 				letter-spacing: 0.5px;
 				text-transform: uppercase;
-				background: linear-gradient(135deg, var(--primary-light) 0%, rgba(16, 185, 129, 0.1) 100%);
 				color: var(--primary);
 				border: 1px solid rgba(16, 185, 129, 0.3);
 			}
@@ -558,6 +569,48 @@
 			</div>
 		</nav>
 
+		<!-- Flash Messages -->
+		{{#if flash.success}}
+		<div class="container mt-3">
+			<div class="alert alert-success alert-dismissible flash-alert" role="alert">
+				<strong>&#10003;</strong> {{flash.success}}
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
+		</div>
+		{{/if}}
+		{{#if flash.error}}
+		<div class="container mt-3">
+			<div class="alert alert-danger alert-dismissible flash-alert" role="alert">
+				<strong>&#9888;</strong> {{flash.error}}
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
+		</div>
+		{{/if}}
+
 		{{{body}}}
+
+		<script>
+			document.addEventListener('DOMContentLoaded', function () {
+				// Auto-dismiss flash alerts after 5 seconds
+				document.querySelectorAll('.flash-alert').forEach(function (el) {
+					setTimeout(function () {
+						var bsAlert = bootstrap.Alert.getOrCreateInstance(el);
+						bsAlert.close();
+					}, 5000);
+				});
+
+				// Loading state on form submit buttons (fires only after HTML5 validation passes)
+				document.querySelectorAll('form').forEach(function (form) {
+					form.addEventListener('submit', function () {
+						var btn = form.querySelector('[type="submit"]');
+						if (btn && !btn.disabled) {
+							var originalText = btn.textContent.trim();
+							btn.disabled = true;
+							btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>' + originalText;
+						}
+					});
+				});
+			});
+		</script>
 	</body>
 </html>

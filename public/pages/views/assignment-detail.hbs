@@ -12,7 +12,7 @@
 
           <p class="mb-2"><strong>Due Date:</strong> {{assignment.dueDate}}</p>
           <p class="mb-2"><strong>Max Points:</strong> {{assignment.maxPoints}}</p>
-          <p class="mb-3"><strong>Status:</strong> <span class="badge {{#if assignment.isDue}}bg-danger{{else}}bg-success{{/if}}">
+          <p class="mb-3"><strong>Status:</strong> <span class="text-white badge {{#if assignment.isDue}}bg-danger{{else}}bg-success{{/if}}">
             {{#if assignment.isDue}}Overdue{{else}}Open ({{assignment.daysUntilDue}} days left){{/if}}
           </span></p>
 
@@ -51,7 +51,7 @@
                   <tr>
                     <td>Student #{{studentId}}</td>
                     <td>{{submittedAt}}</td>
-                    <td><span class="badge {{#if (eq status 'Graded')}}bg-success{{else}}bg-warning{{/if}}">{{status}}</span></td>
+                    <td><span class="text-white badge {{#if (eq status 'Graded')}}bg-success{{else}}bg-warning{{/if}}">{{status}}</span></td>
                     <td><a href="/submission/{{submissionId}}/grade" class="btn btn-sm btn-outline-primary">Grade</a></td>
                   </tr>
                 {{/each}}

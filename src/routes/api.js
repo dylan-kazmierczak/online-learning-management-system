@@ -5,8 +5,12 @@
 
 const { Router } = require('express');
 const { DataAccessController } = require('../controllers/dataAccessController');
+const { requireLogin } = require('../utils/auth_middleware');
 
 const router = Router();
+
+// All API routes require authentication
+router.use(requireLogin());
 
 // System Statistics
 router.get('/stats', DataAccessController.getSystemStats);

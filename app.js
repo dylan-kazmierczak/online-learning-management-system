@@ -65,6 +65,9 @@ app.engine(
 			or: function (a, b) {
 				return a || b;
 			},
+			toString: function (value) {
+				return String(value);
+			},
 		},
 	})
 );
@@ -77,6 +80,14 @@ app.set("views", path.join(__dirname, "/public/pages/views"));
 app.use(bodyParser.urlencoded({ extended: true }));
 // set the static files to be shown to clients as the public directory
 app.use(express.static(path.join(__dirname, "/public")));
+
+// Flash message middleware — reads once and clears from session
+app.use((req, res, next) => {
+	res.locals.flash = req.session.flash || {};
+	delete req.session.flash;
+	next();
+});
+
 // actually use the routes previously imported
 app.use("/", total_routes);
 
